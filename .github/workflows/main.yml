@@ -1,0 +1,31 @@
+name: Unzip Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+          filename:
+            description: 'Name of the zip file to extract'
+            required: true
+            default: 'archive.zip'
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract zip archive
+        run: |
+          if [ -f "${{ github.event.inputs.filename }}" ]; then
+            unzip "${{ github.event.inputs.filename }}" -d extracted_files
+          else
+            echo "File not found: ${{ github.event.inputs.filename }}"
+            exit 1
+          fi
+
+      - name: Upload extracted content
+        uses: actions/upload-artifact@v4
+        with:
+          name: extracted-content
+          path: extracted_files/
