@@ -6,7 +6,7 @@ on:
           filename: 'roulette-pwa.zip'
             description: 'Name of the zip file to extract'
             required: true
-            default: 'archive.zip'
+            default: 'roulette-pwa.zip'
 
 jobs:
   unzip:
