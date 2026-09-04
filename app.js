@@ -589,19 +589,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* Spin Execution with Win Bias Applied */
-  spinBtn.addEventListener("click", () => {
+    spinBtn.addEventListener("click", () => {
     const totalWager = selectedBets.length * chip;
-    if (totalWager > balance) {
-      showErrorToast("Insufficient balance for this wager!"); return;
-    }
+    if (totalWager > balance) { showErrorToast("Insufficient balance for this wager!"); return; }
 
     spinning = true;
     spinBtn.disabled = true;
     spinBtn.textContent = "Spinning...";
     if (betsModal) betsModal.classList.add("hidden");
 
-    // Call biased result function (Targeting ~38% win rate)
+    // 1. Biased result generate karein
     const result = getBiasedSpinResult(selectedBets);
+
+    // 2. Wheel ka rotation exact ussi final result ke index par set karein
     const pocketIndex = WHEEL_ORDER.indexOf(result);
     const targetAngle = 360 * 6 + (360 - pocketIndex * (360 / WHEEL_ORDER.length));
     rotation += targetAngle;
@@ -617,10 +617,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const net = totalReturned - totalWager;
       const newBal = balance + net;
 
-      saveHistoryRecord( {
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: '2-digit', minute: '2-digit', second: '2-digit'
-        }),
+      saveHistoryRecord({
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         result: result,
         color: pocketColor(result),
         staked: totalWager,
@@ -633,7 +631,7 @@ document.addEventListener("DOMContentLoaded", () => {
       lastResultEl.textContent = String(result);
       lastResultEl.className = `last-result ${pocketColor(result)}`;
       outcomeBox.style.display = "block";
-      outcomeBox.innerHTML = `<div class="outcome-headline">Pocket ${result} (${pocketColor(result)}) — Net ${net >= 0 ? "+" + net: net} tokens</div>`;
+      outcomeBox.innerHTML = `<div class="outcome-headline">Pocket ${result} (${pocketColor(result)}) — Net ${net >= 0 ? "+" + net : net} tokens</div>`;
 
       selectedBets = [];
       spinning = false;
@@ -641,6 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
       syncUI();
     });
   });
+
 
   function startAdSimulator(onComplete) {
     adSimModal.classList.remove("hidden");
