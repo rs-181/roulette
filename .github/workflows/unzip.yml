@@ -17,13 +17,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Remove existing roulette-pwa folder
-        run: |
-          if [ -d "roulette-pwa" ]; then
-            rm -rf roulette-pwa
-            echo "Removed existing roulette-pwa folder"
-          fi
-      
       - name: Unzip and move files to root
         run: |
           if [ -f "roulette-pwa.zip" ]; then
@@ -54,13 +47,10 @@ jobs:
             exit 1
           fi
       
-      - name: Commit and push changes
+      - name: Commit and push extracted files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           git commit -m "Extract files to root and remove roulette-pwa folder" || echo "No changes to commit"
-          
-          # Pehle pull karo phir push karo
-          git pull --rebase origin main
-          git push origin main
+          git push
