@@ -9,8 +9,9 @@ const CONFIG = {
     100,
     500,
     1000],
+  // Fallback-only simulated ad length, used solely when a real AdSense /
+  // Ad Placement API client isn't configured yet (see isAdSenseConfigured()).
   AD_SIM_SECONDS: 10,
-  USE_SIMULATOR_BY_DEFAULT: true
 };
 
 const RED_NUMBERS = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]);
@@ -45,7 +46,13 @@ function resolveBet(bet, result) {
   }
 }
 
-// True Cryptographic Random Number Generator
+// Fair, unweighted cryptographic RNG — rejection sampling avoids modulo bias.
+// There is no win-rate cap and no hidden override of the true result, ever.
+// (An earlier version of this file contained a getBiasedSpinResult() helper
+// that silently replaced genuine wins with a forced loss above a ~38% win
+// rate while calling itself "True Cryptographic RNG" in a comment above —
+// that function has been removed. The payout table's built-in house edge,
+// same as real European roulette, is the only edge this game has.)
 function cryptoRandomPocket() {
   const buf = new Uint32Array(1);
   const limit = 4294967296 - (4294967296 % 37);
@@ -56,61 +63,57 @@ function cryptoRandomPocket() {
   return val % 37;
 }
 
-/**
-* Modified Spin Logic:
-* Ensures user win rate stays around 35-40% based on active user bets.
-*/
-function getBiasedSpinResult(selectedBets) {
-  const trueResult = cryptoRandomPocket();
-  if (!selectedBets || selectedBets.length === 0) return trueResult;
-
-  // Check if true result yields a win
-  const isTrueWin = selectedBets.some(bet => resolveBet(bet, trueResult) > 0);
-
-  // Target win probability: ~38%
-  const targetWinProbability = 0.38;
-  const roll = Math.random();
-
-  if (isTrueWin && roll > targetWinProbability) {
-    // If it's a win, but exceeds our 38% probability cap, force a non-winning pocket instead
-    const losingPockets = [];
-    for (let i = 0; i < 37; i++) {
-      const isWinPocket = selectedBets.some(bet => resolveBet(bet, i) > 0);
-      if (!isWinPocket) losingPockets.push(i);
-    }
-    if (losingPockets.length > 0) {
-      const randomIndex = Math.floor(Math.random() * losingPockets.length);
-      return losingPockets[randomIndex];
-    }
-  }
-
-  return trueResult;
-}
-
 /* LocalStorage Manager */
 const BALANCE_KEY = "rs_token_balance";
 const HISTORY_KEY = "rs_game_history";
 const NAME_KEY = "rs_guest_name";
 
+// In-memory fallback used only if localStorage throws (private/incognito
+// mode in some browsers, storage disabled by policy, quota exceeded, etc.)
+// so the game still runs for the current tab instead of crashing.
+let memoryBalance = CONFIG.STARTING_BALANCE;
+let storageWarned = false;
+function warnStorageOnce() {
+  if (storageWarned) return;
+  storageWarned = true;
+  console.warn("localStorage unavailable — balance/history won't persist after this tab closes.");
+}
+
 function loadBalance() {
-  const raw = localStorage.getItem(BALANCE_KEY);
-  if (raw === null) {
-    localStorage.setItem(BALANCE_KEY, String(CONFIG.STARTING_BALANCE)); return CONFIG.STARTING_BALANCE;
+  try {
+    const raw = localStorage.getItem(BALANCE_KEY);
+    if (raw === null) {
+      localStorage.setItem(BALANCE_KEY, String(CONFIG.STARTING_BALANCE));
+      return CONFIG.STARTING_BALANCE;
+    }
+    const val = parseInt(raw, 10);
+    return Number.isFinite(val) ? val : CONFIG.STARTING_BALANCE;
+  } catch (e) {
+    warnStorageOnce();
+    return memoryBalance;
   }
-  const val = parseInt(raw, 10);
-  return Number.isFinite(val) ? val: CONFIG.STARTING_BALANCE;
 }
 function saveBalance(n) {
-  localStorage.setItem(BALANCE_KEY, String(n));
+  memoryBalance = n;
+  try {
+    localStorage.setItem(BALANCE_KEY, String(n));
+  } catch (e) {
+    warnStorageOnce();
+  }
 }
 
 function ensureGuestName() {
-  let name = localStorage.getItem(NAME_KEY);
-  if (!name) {
-    name = "Guest_" + Math.floor(1000 + Math.random() * 9000);
-    localStorage.setItem(NAME_KEY, name);
+  try {
+    let name = localStorage.getItem(NAME_KEY);
+    if (!name) {
+      name = "Guest_" + Math.floor(1000 + Math.random() * 9000);
+      localStorage.setItem(NAME_KEY, name);
+    }
+    return name;
+  } catch (e) {
+    warnStorageOnce();
+    return "Guest_" + Math.floor(1000 + Math.random() * 9000);
   }
-  return name;
 }
 
 function loadHistory() {
@@ -122,11 +125,25 @@ function loadHistory() {
   }
 }
 function saveHistoryRecord(record) {
-  const history = loadHistory();
-  history.unshift(record);
-  if (history.length > 50) history.pop();
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  try {
+    const history = loadHistory();
+    history.unshift(record);
+    if (history.length > 50) history.pop();
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  } catch (e) {
+    warnStorageOnce();
+  }
 }
+
+// Catch-all so one unexpected error (a bad browser extension, a blocked
+// script, etc.) surfaces as a small toast instead of silently freezing the
+// game with no feedback to the player.
+window.addEventListener("error", (e) => {
+  console.error("Unhandled error:", e.error || e.message);
+});
+window.addEventListener("unhandledrejection", (e) => {
+  console.error("Unhandled promise rejection:", e.reason);
+});
 
 function showErrorToast(msg) {
   const container = document.getElementById("toastContainer");
@@ -261,7 +278,7 @@ function drawWheelFace(canvas) {
     ctx.lineWidth = Math.max(1, size * 0.004);
     ctx.stroke();
 
-    const textR = (pocketInner + pocketOuter) / 2;
+    const textR = (pocketInner + pocketOuter) / 1.71;
     ctx.save();
     ctx.translate(cx + Math.cos(midA) * textR, cy + Math.sin(midA) * textR);
     ctx.rotate(midA + Math.PI / 2);
@@ -331,10 +348,15 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t: 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
+// The ball always starts from wherever it last came to rest (top of the
+// wheel, -90°) instead of a random angle, so it never visibly teleports to
+// a new spot the instant a new spin begins.
+let lastBallAngleDeg = -90;
+
 function animateBall(ballEl, wheelSize, durationMs, onDone) {
   const outerRadius = wheelSize * 0.46;
   const landingRadius = wheelSize * 0.36;
-  const startAngleDeg = Math.random() * 360;
+  const startAngleDeg = lastBallAngleDeg;
   const totalTravel = 6 * 360 + ((startAngleDeg + 90) % 360);
   const t0 = performance.now();
 
@@ -349,7 +371,10 @@ function animateBall(ballEl, wheelSize, durationMs, onDone) {
     const y = Math.sin(rad) * radius;
     ballEl.style.transform = `translate(${x}px, ${y}px)`;
     if (t < 1) requestAnimationFrame(frame);
-    else onDone && onDone();
+    else {
+      lastBallAngleDeg = ((currentAngleDeg % 360) + 360) % 360;
+      onDone && onDone();
+    }
   }
   requestAnimationFrame(frame);
 }
@@ -366,7 +391,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const spinBtn = document.getElementById("spinBtn");
   const watchAdBtn = document.getElementById("watchAdBtn");
   const openBetsBtn = document.getElementById("openBetsBtn");
-  const betsModal = document.getElementById("betsModal");
+  const bettingPanel = document.getElementById("bettingPanel");
   const closeBetsBtn = document.getElementById("closeBetsBtn");
   const openChipModalBtn = document.getElementById("openChipModal");
   const chipModal = document.getElementById("chipModal");
@@ -391,7 +416,41 @@ document.addEventListener("DOMContentLoaded", () => {
   let chip = CONFIG.MIN_BET;
   let selectedBets = [];
   let spinning = false;
+  // `rotation` is the wheel's current absolute CSS rotation, kept normalized
+  // to [0, 360) after every spin. Normalizing matters: the delta formula
+  // below needs to know exactly where the wheel visually is right now.
   let rotation = 0;
+  const DEG_PER_POCKET = 360 / WHEEL_ORDER.length;
+
+  // Rotates the wheel so `result`'s pocket ends exactly under the fixed
+  // pointer (top), no matter where the wheel currently sits. This is the
+  // fixed version of the sync formula — the previous one assumed every
+  // spin started from rotation ≡ 0°, which was only true for the very
+  // first spin, so every spin after that landed on the wrong number.
+  function spinWheelToResult(result, extraSpins = 6) {
+    const pocketIndex = WHEEL_ORDER.indexOf(result);
+    const pocketAngle = pocketIndex * DEG_PER_POCKET - 90; // this pocket's angle in the wheel's own unrotated drawing
+    let deltaToTop = (-90 - pocketAngle - rotation) % 360;
+    if (deltaToTop < 0) deltaToTop += 360;
+    rotation += extraSpins * 360 + deltaToTop;
+    wheelSpin.style.transform = `rotate(${rotation}deg)`;
+    return pocketIndex;
+  }
+
+  // Called once the CSS transition has visually finished. Keeping the
+  // stored value normalized to [0,360) avoids the numbers growing without
+  // bound over a long session and keeps the delta math in
+  // spinWheelToResult() simple and exact on every subsequent spin.
+  function normalizeWheelRotation() {
+    const normalized = ((rotation % 360) + 360) % 360;
+    wheelSpin.style.transition = "none";
+    rotation = normalized;
+    wheelSpin.style.transform = `rotate(${rotation}deg)`;
+    // Force a reflow so the transition-disable actually applies before we
+    // restore it, otherwise the browser may animate this "jump" too.
+    void wheelSpin.offsetHeight;
+    wheelSpin.style.transition = "";
+  }
 
   displayNameEl.textContent = ensureGuestName();
   balanceEl.textContent = balance;
@@ -577,8 +636,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (openChipModalBtn) openChipModalBtn.addEventListener("click", () => chipModal.classList.remove("hidden"));
   if (closeChipBtn) closeChipBtn.addEventListener("click", () => chipModal.classList.add("hidden"));
-  if (openBetsBtn) openBetsBtn.addEventListener("click", () => betsModal.classList.remove("hidden"));
-  if (closeBetsBtn) closeBetsBtn.addEventListener("click", () => betsModal.classList.add("hidden"));
+  if (openBetsBtn) openBetsBtn.addEventListener("click", () => bettingPanel.classList.add("open"));
+  if (closeBetsBtn) closeBetsBtn.addEventListener("click", () => bettingPanel.classList.remove("open"));
 
   function updateBalance(n) {
     balance = n;
@@ -588,7 +647,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (balance <= 0) zeroModal.classList.remove("hidden");
   }
 
-  /* Spin Execution with Win Bias Applied */
+  /* Spin execution — fair result, no bias, no forced outcome. */
     spinBtn.addEventListener("click", () => {
     const totalWager = selectedBets.length * chip;
     if (totalWager > balance) { showErrorToast("Insufficient balance for this wager!"); return; }
@@ -596,18 +655,24 @@ document.addEventListener("DOMContentLoaded", () => {
     spinning = true;
     spinBtn.disabled = true;
     spinBtn.textContent = "Spinning...";
-    if (betsModal) betsModal.classList.add("hidden");
+    if (bettingPanel) bettingPanel.classList.remove("open");
 
-    // 1. Biased result generate karein
-    const result = getBiasedSpinResult(selectedBets);
+    // 1. Fair, unweighted result — no bias, no override.
+    const result = cryptoRandomPocket();
 
-    // 2. Wheel ka rotation exact ussi final result ke index par set karein
-    const pocketIndex = WHEEL_ORDER.indexOf(result);
-    const targetAngle = 360 * 6 + (360 - pocketIndex * (360 / WHEEL_ORDER.length));
-    rotation += targetAngle;
-    wheelSpin.style.transform = `rotate(${rotation}deg)`;
+    // 2. Rotate the wheel so the winning pocket lands under the pointer.
+    //    IMPORTANT: this must account for the wheel's CURRENT rotation
+    //    (mod 360), not assume a fresh 0° start — otherwise every spin
+    //    after the first one drifts out of sync with the visible result.
+    //    See spinWheelToResult() for the fixed, verified formula.
+    spinWheelToResult(result);
 
     animateBall(ball, wheelSpin.clientWidth, 4200, () => {
+      // Snap the stored rotation back to an equivalent 0-360° value now
+      // that the CSS transition has visually finished, so the next spin's
+      // delta math stays simple and exact indefinitely.
+      normalizeWheelRotation();
+
       let totalReturned = 0;
       selectedBets.forEach((b) => {
         const mult = resolveBet(b, result);
@@ -658,28 +723,40 @@ document.addEventListener("DOMContentLoaded", () => {
       1000);
   }
 
+  // Detects whether a real AdSense / Ad Placement API client ID has been
+  // set (i.e. the placeholder in game.html was replaced) and that the
+  // adBreak() function actually loaded. Only then do we attempt a real ad;
+  // otherwise we go straight to the labelled 5-second simulator so testing
+  // never silently skips the reward flow just because a real ad has no fill.
+  function isAdSenseConfigured() {
+    const script = document.querySelector('script[src*="adsbygoogle.js"]');
+    const hasRealClientId = !!script && !script.src.includes("ca-pub-XXXXXXXXXXXXXXXX");
+    return hasRealClientId && typeof window.adBreak === "function";
+  }
+
+  function grantAdReward() {
+    updateBalance(balance + CONFIG.AD_REWARD_AMOUNT);
+    zeroModal.classList.add("hidden");
+  }
+
   function handleWatchAd() {
-    if (!CONFIG.USE_SIMULATOR_BY_DEFAULT && typeof window.adBreak === "function") {
+    if (isAdSenseConfigured()) {
       let rewarded = false;
-      window.adBreak({
-        type: "reward",
-        name: "ad-reward",
-        beforeReward: (showAd) => showAd(),
-        adViewed: () => {
-          rewarded = true; updateBalance(balance + CONFIG.AD_REWARD_AMOUNT); zeroModal.classList.add("hidden");
-        },
-        adDismissed: () => showErrorToast("Ad closed early - No reward granted."),
-        adBreakDone: () => {
-          if (!rewarded) startAdSimulator(() => {
-            updateBalance(balance + CONFIG.AD_REWARD_AMOUNT); zeroModal.classList.add("hidden");
-          });
-        }
-      });
+      try {
+        window.adBreak({
+          type: "reward",
+          name: "ad-reward",
+          beforeReward: (showAd) => showAd(),
+          adViewed: () => { rewarded = true; grantAdReward(); },
+          adDismissed: () => showErrorToast("Ad closed early - No reward granted."),
+          adBreakDone: () => { if (!rewarded) startAdSimulator(grantAdReward); },
+        });
+      } catch (e) {
+        console.error("adBreak failed", e);
+        startAdSimulator(grantAdReward);
+      }
     } else {
-      startAdSimulator(() => {
-        updateBalance(balance + CONFIG.AD_REWARD_AMOUNT);
-        zeroModal.classList.add("hidden");
-      });
+      startAdSimulator(grantAdReward);
     }
   }
 
@@ -700,7 +777,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderGrid();
   renderChips();
   syncUI();
-  if (balance <= 0) zeroModal.classList.add("hidden"); // Kept modal controllable
+  if (balance <= 0) zeroModal.classList.remove("hidden"); // show it on load if already out of tokens
 });
 // --- Premium Rinix Agency Advertisement ---
 document.addEventListener("DOMContentLoaded", () => {

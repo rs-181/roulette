@@ -1,0 +1,15 @@
+# robots.txt for Roulette Game
+# Allow all crawlers access
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Disallow sensitive/admin paths (if any)
+Disallow: /admin/
+Disallow: /private/
+
+# Crawl-delay to be respectful
+Crawl-delay: 1

@@ -1,4 +1,4 @@
-const CACHE_NAME = "roulette-sim-static-v2";
+const CACHE_NAME = "roulette-v1";
 const PRECACHE_URLS = [
   "index.html",
   "game.html",

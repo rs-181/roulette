@@ -257,16 +257,16 @@ a {
 }
 
 .ad-slot {
-  height: 60px;
+  height: 100px;
   border-radius: 10px;
-  border: 1px dashed rgba(212,175,55,0.3);
+  border: 3px dashed rgba(212,175,55,0.3);
   background: rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   font-size: 10px;
-  opacity: 0.6;
+  opacity: 1.0;
 }
 
 /* Modals & Drawers */
@@ -351,6 +351,32 @@ a {
   background: rgba(255,255,255,0.03);
   font-size: 12px;
   text-align: center;
+}
+
+/* Betting panel: hidden bottom-sheet by default (narrow portrait phones),
+   opened via the "Select Numbers" button. The PC/landscape media query
+   further down turns this into an always-visible inline panel instead. */
+.betting-panel {
+  display: none;
+}
+.betting-panel.open {
+  display: block;
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 100;
+  background: var(--velvet-2);
+  border-top: 1px solid var(--gold);
+  border-radius: 20px 20px 0 0;
+  padding: 16px;
+  max-height: 80dvh;
+  overflow-y: auto;
+  touch-action: pan-y;
+}
+.betting-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
 .custom-chip-box {
@@ -519,43 +545,98 @@ a {
   flex-shrink: 0;
 }
 
-/* Mobile Stacked Layout Override */
-@media (max-width: 768px) {
+/* ==========================================================================
+   RESPONSIVE LAYOUT
+   Default (this block): PC / tablet / any landscape-ish wide viewport —
+   two columns, wheel left, betting controls right, sized fluidly so it
+   always fits the viewport with no page scroll.
+   ========================================================================== */
+.game-container {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 20px;
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  align-items: center;
+  overflow: hidden;
+}
+
+.wheel-stage {
+  position: relative;
+  width: min(46vw, 46vh, 480px);
+  height: min(46vw, 46vh, 480px);
+}
+
+#wheelCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* PC and landscape phones: show the betting board inline next to the
+   wheel (like a real casino table) instead of behind a tap-to-open sheet.
+   The portrait-phone breakpoint below does NOT include this override, so
+   phones held upright still get the space-saving bottom-sheet version. */
+@media (min-width: 901px), (max-height: 520px) and (orientation: landscape) {
+  .betting-panel {
+    display: block !important;
+    position: static;
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    max-height: min(48vh, 380px);
+    overflow-y: auto;
+  }
+  .betting-panel-header {
+    display: none;
+  }
+  #openBetsBtn {
+    display: none;
+  }
+}
+
+/* ---- Narrow PORTRAIT phones: stack vertically, wheel on top ----
+   The betting grid stays inside its bottom-sheet modal on this layout, so
+   the main screen itself never needs to scroll. */
+@media (max-width: 720px) and (orientation: portrait) {
   .game-container {
-    flex-direction: column;
-    gap: 8px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 8px;
+    gap: 6px;
   }
   .wheel-stage {
-    width: min(56vmin, 260px);
-    height: min(56vmin, 260px);
+    width: min(62vmin, 280px);
+    height: min(62vmin, 280px);
   }
   .controls-section {
     max-width: 100%;
   }
 }
 
-/* PC Optimized Layout & Large Wheel */
-.game-container {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 20px;
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
-  align-items: center;
-}
-
-.wheel-stage {
-  position: relative;
-  width: 480px;
-  height: 480px;
-}
-
-#wheelCanvas {
-  width: 100%;
-  height: 100%;
+/* ---- Landscape phones (and short tablets): use the same PC-style
+   side-by-side layout, just tighter, so rotating the phone gives the
+   "desktop" experience without any scrolling. ---- */
+@media (max-height: 520px) and (orientation: landscape) {
+  .game-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 6px;
+  }
+  .wheel-stage {
+    width: min(72vh, 40vw, 260px);
+    height: min(72vh, 40vw, 260px);
+  }
+  .top-bar { height: 34px; }
+  .icon-btn { width: 30px; height: 30px; font-size: 13px; }
+  .balance-pill { padding: 5px 10px; font-size: 12px; }
+  .controls-section { gap: 6px; }
+  .betting-panel { max-height: min(60vh, 260px); }
+  .watch-ad-btn, .ad-slot { display: none; } /* keep the short viewport focused on play; ad + reward still reachable from the top-bar/zero modal */
 }
 
 /* Perfect Circle Coin Chip */
@@ -604,16 +685,11 @@ a {
   background: radial-gradient(circle, #d4af37, #6a5213);
 }
 
-/* Responsive adjustment for mobile */
-@media (max-width: 900px) {
-  .game-container {
-    grid-template-columns: 1fr;
-    overflow-y: auto;
-  }
-  .wheel-stage {
-    width: 300px;
-    height: 300px;
-  }
+/* (superseded by the consolidated portrait/landscape rules above —
+   kept as a fallback only for very narrow portrait windows that
+   aren't phones, e.g. a resized desktop browser window) */
+@media (max-width: 900px) and (orientation: portrait) {
+  .game-container { grid-template-columns: 1fr; }
 }
 /* ================================
    RINIX AGENCY PREMIUM AD SLOT

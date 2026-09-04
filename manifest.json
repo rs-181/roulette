@@ -1,10 +1,10 @@
 {
-  "name": "Roulette Simulation",
-  "short_name": "Roulette Sim",
+  "name": "Roulette",
+  "short_name": "Roulette",
   "description": "Play-money roulette simulation \u2014 fair RNG, no real payments.",
   "start_url": "game.html",
   "display": "fullscreen",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#0a0508",
   "theme_color": "#0a0508",
   "icons": [

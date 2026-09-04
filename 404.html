@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 - Page Not Found | Roulette</title>
+  <meta name="theme-color" content="#0a0508" />
+  <style>
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(ellipse at center, #0d2a0d, #050505 70%);
+      color: #f3e9d2;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ============================================
+       ANIMATED WHEEL BACKGROUND
+       ============================================ */
+    .bg-wheel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      border: 4px solid rgba(212, 175, 55, 0.08);
+      animation: bgSpin 60s linear infinite;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .bg-wheel::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      border-radius: 50%;
+      border: 2px solid rgba(212, 175, 55, 0.06);
+    }
+
+    .bg-wheel::after {
+      content: '';
+      position: absolute;
+      top: 25%;
+      left: 25%;
+      width: 50%;
+      height: 50%;
+      border-radius: 50%;
+      border: 2px solid rgba(212, 175, 55, 0.05);
+    }
+
+    @keyframes bgSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(212, 175, 55, 0.2);
+      border-radius: 50%;
+      animation: floatUp linear infinite;
+    }
+
+    .particle:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; width: 6px; height: 6px; }
+    .particle:nth-child(2) { left: 20%; animation-duration: 12s; animation-delay: 2s; width: 3px; height: 3px; }
+    .particle:nth-child(3) { left: 35%; animation-duration: 10s; animation-delay: 4s; width: 5px; height: 5px; }
+    .particle:nth-child(4) { left: 50%; animation-duration: 14s; animation-delay: 1s; width: 4px; height: 4px; }
+    .particle:nth-child(5) { left: 65%; animation-duration: 9s; animation-delay: 3s; width: 7px; height: 7px; }
+    .particle:nth-child(6) { left: 75%; animation-duration: 11s; animation-delay: 5s; width: 3px; height: 3px; }
+    .particle:nth-child(7) { left: 85%; animation-duration: 13s; animation-delay: 2s; width: 5px; height: 5px; }
+    .particle:nth-child(8) { left: 45%; animation-duration: 7s; animation-delay: 6s; width: 4px; height: 4px; }
+    .particle:nth-child(9) { left: 55%; animation-duration: 15s; animation-delay: 0s; width: 6px; height: 6px; }
+    .particle:nth-child(10) { left: 30%; animation-duration: 10s; animation-delay: 7s; width: 3px; height: 3px; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* ============================================
+       MAIN CONTENT
+       ============================================ */
+    .error-container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+      padding: 40px 30px;
+      background: rgba(10, 5, 8, 0.85);
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 80px rgba(212, 175, 55, 0.03);
+    }
+
+    /* ============================================
+       ERROR NUMBER - 404
+       ============================================ */
+    .error-number {
+      font-size: 120px;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(180deg, #d4af37, #8a6a1f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .error-number .zero {
+      display: inline-block;
+      animation: wobble 3s ease-in-out infinite;
+    }
+
+    .error-number .zero:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+
+    /* ============================================
+       ROULETTE BALL ICON
+       ============================================ */
+    .roulette-icon {
+      font-size: 48px;
+      margin: 10px 0;
+      display: block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ============================================
+       TEXT
+       ============================================ */
+    .error-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #f3e9d2;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .error-title .highlight {
+      color: #d4af37;
+    }
+
+    .error-description {
+      font-size: 15px;
+      color: #a0a0a0;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .error-description strong {
+      color: #d4af37;
+    }
+
+    /* ============================================
+       DIVIDER
+       ============================================ */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #d4af37, transparent);
+      margin: 16px auto;
+      border-radius: 2px;
+    }
+
+    /* ============================================
+       BUTTONS
+       ============================================ */
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: linear-gradient(180deg, #d4af37, #8a6a1f);
+      color: #0a0508;
+      font-size: 16px;
+      font-weight: 800;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: transparent;
+      color: #d4af37;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(212, 175, 55, 0.1);
+      border-color: #d4af37;
+    }
+
+    /* ============================================
+       SUGGESTED LINKS
+       ============================================ */
+    .suggested-links {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .suggested-links a {
+      color: #888;
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.3s;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .suggested-links a:hover {
+      color: #d4af37;
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    .suggested-links .dot {
+      color: #444;
+      font-size: 6px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .error-footer {
+      margin-top: 25px;
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 0.5px;
+    }
+
+    .error-footer a {
+      color: #777;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .error-footer a:hover {
+      color: #d4af37;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 600px) {
+      .error-container {
+        padding: 30px 20px;
+        border-radius: 16px;
+      }
+
+      .error-number {
+        font-size: 80px;
+      }
+
+      .error-title {
+        font-size: 22px;
+      }
+
+      .error-description {
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        padding: 12px 24px;
+        font-size: 14px;
+      }
+
+      .btn-secondary {
+        padding: 10px 20px;
+        font-size: 13px;
+      }
+
+      .bg-wheel {
+        width: 400px;
+        height: 400px;
+      }
+
+      .roulette-icon {
+        font-size: 36px;
+      }
+
+      .suggested-links {
+        gap: 10px;
+      }
+
+      .suggested-links a {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .error-container {
+        padding: 24px 16px;
+      }
+
+      .error-number {
+        font-size: 60px;
+      }
+
+      .error-title {
+        font-size: 18px;
+      }
+
+      .bg-wheel {
+        width: 300px;
+        height: 300px;
+      }
+
+      .button-group {
+        gap: 10px;
+      }
+
+      .btn-primary {
+        padding: 10px 20px;
+        font-size: 13px;
+      }
+    }
+
+    /* ============================================
+       REDIRECT COUNTER (Optional)
+       ============================================ */
+    .redirect-timer {
+      font-size: 13px;
+      color: #666;
+      margin-top: 12px;
+    }
+
+    .redirect-timer strong {
+      color: #d4af37;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Wheel -->
+  <div class="bg-wheel"></div>
+
+  <!-- Floating Particles -->
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- Main Error Content -->
+  <div class="error-container">
+    
+    <!-- 404 Number -->
+    <div class="error-number">
+     <span>4 0 4</span>
+    </div>
+
+    <!-- Roulette Icon -->
+    <span class="roulette-icon">🎰</span>
+
+    <!-- Title -->
+    <h1 class="error-title">
+      Oops! <span class="highlight">Spin</span> Went Wrong
+    </h1>
+
+    <!-- Description -->
+    <p class="error-description">
+      The page you're looking for <strong>doesn't exist</strong> on the roulette table.
+      Maybe it landed on the wrong number?
+    </p>
+
+    <div class="divider"></div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <a href="game.html" class="btn-primary">
+        🎯 Play Roulette
+      </a>
+      <a href="index.html" class="btn-secondary">
+        🏠 Back to Home
+      </a>
+    </div>
+
+    <!-- Suggested Links -->
+    <div class="suggested-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <span class="dot">●</span>
+      <a href="terms.html">Terms of Service</a>
+      <span class="dot">●</span>
+      <a href="game.html">Play Game</a>
+    </div>
+
+    <!-- Auto Redirect Timer -->
+    <div class="redirect-timer">
+      Redirecting to <strong id="countdown">10</strong>s
+    </div>
+
+    <!-- Footer -->
+    <div class="error-footer">
+      &copy; 2026 <a href="https://rinix.online" target="_blank">RINIX</a> · All Rights Reserved
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // AUTO REDIRECT TO GAME
+    // ============================================
+    (function() {
+      let seconds = 10;
+      const countdownEl = document.getElementById('countdown');
+      
+      const interval = setInterval(() => {
+        seconds--;
+        if (countdownEl) {
+          countdownEl.textContent = seconds;
+        }
+        
+        if (seconds <= 0) {
+          clearInterval(interval);
+          window.location.href = 'index.html';
+        }
+      }, 1000);
+
+      // Stop redirect if user interacts
+      const stopRedirect = () => {
+        clearInterval(interval);
+        const timerEl = document.querySelector('.redirect-timer');
+        if (timerEl) {
+          timerEl.style.display = 'none';
+        }
+      };
+
+      document.querySelector('.btn-primary')?.addEventListener('click', stopRedirect);
+      document.querySelector('.btn-secondary')?.addEventListener('click', stopRedirect);
+      document.querySelectorAll('.suggested-links a').forEach(el => {
+        el.addEventListener('click', stopRedirect);
+      });
+
+      // Also stop on any click
+      document.addEventListener('click', () => {
+        clearInterval(interval);
+        const timerEl = document.querySelector('.redirect-timer');
+        if (timerEl) {
+          timerEl.style.display = 'none';
+        }
+      }, { once: true });
+
+    })();
+
+    // ============================================
+    // CONSOLE EASTER EGG
+    // ============================================
+    console.log('%c🎰 404 - Page Not Found', 'font-size:24px;font-weight:bold;color:#d4af37;');
+    console.log('%cLooks like you hit the wrong number! Try playing roulette instead.', 'font-size:14px;color:#888;');
+    console.log('%c➡️ Go to: game.html', 'font-size:14px;color:#d4af37;');
+  </script>
+
+</body>
+</html>

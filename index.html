@@ -1,93 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Welcome - Roulette Simulation</title>
-<style>
-  :root {
-    --bg-color: #0a0508;
-    --surface-color: #140d13;
-    --gold-primary: #d4af37;
-    --gold-light: #fff3c4;
-  }
-  body {
-    background-color: var(--bg-color);
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  .welcome-card {
-    background: var(--surface-color);
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    max-width: 420px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-  }
-  h1 { color: var(--gold-primary); margin-bottom: 10px; font-size: 1.8rem; }
-  p { color: #b0b0b0; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
-  .terms-box {
-    display: flex;
-    align-items: flex-start;
-    text-align: left;
-    gap: 10px;
-    margin-bottom: 20px;
-    font-size: 0.85rem;
-    color: #d0d0d0;
-  }
-  .terms-box input { margin-top: 3px; cursor: pointer; }
-  .terms-box a { color: var(--gold-light); text-decoration: underline; }
-  .enter-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(180deg, #d4af37, #8a6a1f);
-    border: none;
-    border-radius: 25px;
-    color: #000;
-    font-size: 1.1rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-  .enter-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roulette - Play Free Casino Game Online | RINIX</title>
+  <meta name="description" content="Play free European roulette online with fair RNG, no real money required. Start with 1000 free tokens and enjoy realistic casino experience." />
+  <meta name="keywords" content="roulette, free roulette, online roulette, casino game, european roulette, play roulette" />
+  <meta name="theme-color" content="#0a0508" />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Roulette - Free Online Casino Game" />
+  <meta property="og:description" content="Play European roulette with fair RNG and free tokens. No download required." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourdomain.com/" />
+  <meta property="og:image" content="https://yourdomain.com/og-image.jpg" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Roulette - Free Online Casino Game" />
+  <meta name="twitter:description" content="Play European roulette with fair RNG and free tokens." />
+  <meta name="twitter:image" content="https://yourdomain.com/og-image.jpg" />
+  
+  <!-- Canonical -->
+  <link rel="canonical" href="https://yourdomain.com/" />
+  
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  
+  <!-- Preconnect for Performance -->
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+  <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+  
+  <style>
+    :root {
+      --bg-color: #0a0508;
+      --surface-color: #140d13;
+      --gold-primary: #d4af37;
+      --gold-light: #fff3c4;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-color);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .welcome-card {
+      background: var(--surface-color);
+      padding: 40px 35px;
+      border-radius: 16px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    }
+    .logo-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+    h1 { 
+      color: var(--gold-primary); 
+      margin-bottom: 8px; 
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+    .subtitle { 
+      color: #a0a0a0; 
+      font-size: 0.85rem; 
+      margin-bottom: 20px; 
+    }
+    p { 
+      color: #b0b0b0; 
+      font-size: 0.9rem; 
+      margin-bottom: 20px; 
+      line-height: 1.6; 
+    }
+    .features { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 8px; 
+      margin: 16px 0 20px;
+      text-align: left;
+    }
+    .feature-item { 
+      font-size: 0.8rem; 
+      color: #c0c0c0; 
+      padding: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feature-item::before { content: "🎯"; font-size: 14px; }
+    .terms-box {
+      display: flex;
+      align-items: flex-start;
+      text-align: left;
+      gap: 10px;
+      margin: 16px 0 20px;
+      font-size: 0.8rem;
+      color: #b0b0b0;
+      background: rgba(0,0,0,0.2);
+      padding: 12px 14px;
+      border-radius: 8px;
+    }
+    .terms-box input { margin-top: 3px; cursor: pointer; flex-shrink: 0; }
+    .terms-box a { color: var(--gold-light); text-decoration: underline; }
+    .enter-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(180deg, #d4af37, #8a6a1f);
+      border: none;
+      border-radius: 50px;
+      color: #000;
+      font-size: 1.1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+    .enter-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,175,55,0.25); }
+    .enter-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .footer-links { margin-top: 16px; font-size: 0.7rem; color: #555; }
+    .footer-links a { color: #777; text-decoration: none; margin: 0 8px; }
+    .footer-links a:hover { color: var(--gold-primary); }
+    
+    @media (max-width: 480px) {
+      .welcome-card { padding: 28px 20px; }
+      h1 { font-size: 1.6rem; }
+      .features { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <div class="welcome-card">
-    <h1>Roulette By Rinix</h1>
-    <p>Welcome to the roulette. Please review and accept our policies to enter the game.</p>
+  <main class="welcome-card">
+    <span class="logo-icon">🎰</span>
+    <h1>Roulette</h1>
+    <p class="subtitle">by <a href="https://rinix.online" target="_blank" style="color:var(--gold-primary);font-weight:700;">RINIX</a></p>
+    
+    <p>Welcome to the roulette table. Start with <strong style="color:var(--gold-primary);">1000 free tokens</strong> and enjoy a realistic casino experience with fair cryptographic RNG.</p>
+    
+    <div class="features">
+      <span class="feature-item">European Roulette</span>
+      <span class="feature-item">Fair RNG</span>
+      <span class="feature-item">No Real Money</span>
+      <span class="feature-item">Ad Rewards</span>
+    </div>
     
     <div class="terms-box">
       <input type="checkbox" id="agreeCheckbox" />
       <label for="agreeCheckbox">
-        I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>, and confirm I am using this game on my risk.
+        I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>, and confirm I am using this game at my own risk.
       </label>
     </div>
 
-    <button id="enterBtn" class="enter-btn" disabled>Enter Game</button>
-  </div>
+    <button id="enterBtn" class="enter-btn" disabled>🎯 Enter Game</button>
+    
+    <div class="footer-links">
+      <a href="privacy.html">Privacy</a> ·
+      <a href="terms.html">Terms</a> ·
+      <a href="https://rinix.online" target="_blank">RINIX</a>
+    </div>
+  </main>
 
-<script>
-  const checkbox = document.getElementById("agreeCheckbox");
-  const enterBtn = document.getElementById("enterBtn");
+  <script>
+    (function() {
+      const checkbox = document.getElementById("agreeCheckbox");
+      const enterBtn = document.getElementById("enterBtn");
 
-  checkbox.addEventListener("change", () => {
-    enterBtn.disabled = !checkbox.checked;
-  });
+      checkbox.addEventListener("change", function() {
+        enterBtn.disabled = !this.checked;
+      });
 
-  enterBtn.addEventListener("click", () => {
-    if (!enterBtn.disabled) {
-      window.location.href = "game.html";
-    }
-  });
-</script>
+      enterBtn.addEventListener("click", function() {
+        if (!this.disabled) {
+          window.location.href = "game.html";
+        }
+      });
+
+      // Keyboard support
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Enter" && !enterBtn.disabled) {
+          enterBtn.click();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
