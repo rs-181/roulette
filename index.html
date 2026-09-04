@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Welcome - Roulette Simulation</title>
+<style>
+  :root {
+    --bg-color: #0a0508;
+    --surface-color: #140d13;
+    --gold-primary: #d4af37;
+    --gold-light: #fff3c4;
+  }
+  body {
+    background-color: var(--bg-color);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .welcome-card {
+    background: var(--surface-color);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  }
+  h1 { color: var(--gold-primary); margin-bottom: 10px; font-size: 1.8rem; }
+  p { color: #b0b0b0; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
+  .terms-box {
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: #d0d0d0;
+  }
+  .terms-box input { margin-top: 3px; cursor: pointer; }
+  .terms-box a { color: var(--gold-light); text-decoration: underline; }
+  .enter-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(180deg, #d4af37, #8a6a1f);
+    border: none;
+    border-radius: 25px;
+    color: #000;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .enter-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+</style>
+</head>
+<body>
+  <div class="welcome-card">
+    <h1>Roulette By Rinix</h1>
+    <p>Welcome to the roulette. Please review and accept our policies to enter the game.</p>
+    
+    <div class="terms-box">
+      <input type="checkbox" id="agreeCheckbox" />
+      <label for="agreeCheckbox">
+        I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>, and confirm I am using this game on my risk.
+      </label>
+    </div>
+
+    <button id="enterBtn" class="enter-btn" disabled>Enter Game</button>
+  </div>
+
+<script>
+  const checkbox = document.getElementById("agreeCheckbox");
+  const enterBtn = document.getElementById("enterBtn");
+
+  checkbox.addEventListener("change", () => {
+    enterBtn.disabled = !checkbox.checked;
+  });
+
+  enterBtn.addEventListener("click", () => {
+    if (!enterBtn.disabled) {
+      window.location.href = "game.html";
+    }
+  });
+</script>
+</body>
+</html>

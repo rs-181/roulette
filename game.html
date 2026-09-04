@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Roulette Simulation</title>
+<meta name="description" content="High performance web roulette simulation game" />
+<meta name="theme-color" content="#0a0508" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icon-192.png" />
+<link rel="stylesheet" href="style.css" />
+
+<!-- Google AdSense API (Optional - Default uses rinix.online simulation until configured) -->
+<script>
+window.adsbygoogle = window.adsbygoogle || [];
+window.adBreak = window.adBreak || function (o) {
+adsbygoogle.push(o);
+};
+window.adConfig = window.adConfig || function (o) {
+adsbygoogle.push(o);
+};
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<main class="app-shell">
+<!-- Top Navigation Bar -->
+<header class="top-bar">
+<div class="balance-pill">
+<span id="displayName">Guest</span>
+<span class="gold-text"><span id="balance">...</span> tokens</span>
+</div>
+<button class="icon-btn" id="historyBtn" title="History" aria-label="Open History">📜</button>
+<button class="icon-btn" id="fullscreenBtn" title="Fullscreen" aria-label="Toggle Fullscreen">⛶</button>
+</header>
+
+<div class="game-container">
+<!-- Left / Center Section: Wheel Stage -->
+<section class="wheel-section">
+<div class="wheel-stage">
+<div class="wheel-pointer"></div>
+<div class="wheel-spin" id="wheelSpin">
+<canvas id="wheelCanvas" width="300" height="300"></canvas>
+</div>
+<div class="ball" id="ball"></div>
+</div>
+<div class="result-badge">
+<span>Last Result: </span>
+<span class="last-result" id="lastResult">--</span>
+</div>
+</section>
+
+<!-- Right Section: Controls & Actions -->
+<section class="controls-section">
+<div id="outcomeBox" class="outcome-box" style="display:none;"></div>
+
+<div class="wager-row">
+<span id="wagerStatus">0 bet(s) · 10/bet · total 0</span>
+</div>
+
+<div class="action-grid">
+<button class="select-bets-btn" id="openBetsBtn">Select Numbers</button>
+<button class="chip-btn" id="openChipModal">10 chip</button>
+<button class="spin-btn" id="spinBtn" disabled>Spin</button>
+</div>
+
+<button class="watch-ad-btn" id="watchAdBtn">▶ Watch Ad for +100 tokens</button>
+<div id="mainAdStatus" class="ad-status-text"></div>
+
+<!-- Ad Slot -->
+<div class="ad-slot" id="adSlot">
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+data-ad-slot="0000000000"
+data-ad-format="auto"
+data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</section>
+</div>
+
+<footer class="footer-links">
+<a href="privacy.html">Privacy Policy</a> &middot; <a href="terms.html">Terms of Service</a>
+</footer>
+</main>
+
+<!-- Bet Selection Drawer Modal -->
+<div class="modal-backdrop hidden" id="betsModal" role="dialog" aria-modal="true">
+<div class="modal-drawer">
+<div class="modal-header">
+<h3 class="gold-text">Place Your Bets</h3>
+<button class="modal-close" id="closeBetsBtn" aria-label="Close Bets Modal">&times;</button>
+</div>
+<div class="number-grid" id="numberGrid"></div>
+<div class="outside-bets" id="outsideBets"></div>
+</div>
+</div>
+
+<!-- Custom Chip Value Modal -->
+<div class="modal-backdrop hidden" id="chipModal" role="dialog" aria-modal="true">
+<div class="modal-drawer">
+<div class="modal-header">
+<h3 class="gold-text">Select / Custom Chip Value</h3>
+<button class="modal-close" id="closeChipBtn" aria-label="Close Chip Modal">&times;</button>
+</div>
+<p class="sub-text">
+Min bet 10 · Max bet 10,000 (Capped by balance)
+</p>
+<div class="chip-grid" id="chipGrid"></div>
+<div class="custom-chip-box">
+<input type="number" id="customChipInput" placeholder="Enter amount (10 - 10000)" min="10" max="10000" step="1" />
+<button id="setCustomChipBtn" class="primary-btn">Set Chip</button>
+</div>
+</div>
+</div>
+
+<!-- Game History Modal -->
+<div class="modal-backdrop hidden" id="historyModal" role="dialog" aria-modal="true">
+<div class="modal-drawer history-drawer">
+<div class="modal-header">
+<h3 class="gold-text">Betting History</h3>
+<button class="modal-close" id="closeHistoryBtn" aria-label="Close History Modal">&times;</button>
+</div>
+<div class="history-list-wrap" id="historyList">
+<p class="empty-history">
+No games played yet.
+</p>
+</div>
+</div>
+</div>
+
+<!-- Zero Balance Modal -->
+<div class="modal-backdrop hidden" id="zeroModal" role="dialog" aria-modal="true">
+<div class="modal-drawer zero-modal-content">
+<h3 class="gold-text">Out of Tokens!</h3>
+<p>
+Watch a short ad to claim <strong>100 free tokens</strong> instantly.
+</p>
+<div class="zero-actions">
+<button class="reward-btn" id="zeroWatchAdBtn">▶ Watch Ad for +100 tokens</button>
+<div id="adStatus" class="ad-status-text"></div>
+<button class="secondary-btn" id="zeroCloseBtn">Not Now</button>
+</div>
+</div>
+</div>
+
+<!-- Reward Advertisement Modal -->
+<div class="modal-backdrop hidden" id="adSimModal" role="dialog" aria-modal="true">
+
+<div class="modal-drawer ad-sim-content">
+
+<div class="rinix-reward-ad">
+
+<div class="rinix-ad-top">
+<span class="ad-badge">ADVERTISEMENT</span>
+<span class="rinix-powered">rinix.online</span>
+</div>
+
+<div class="rinix-reward-content">
+
+<div class="rinix-reward-logo">
+R
+</div>
+
+<div class="rinix-reward-info">
+<h2>RINIX</h2>
+<h3>Web Development Agency</h3>
+
+<p>
+We build modern websites, powerful web apps
+and professional digital experiences.
+</p>
+</div>
+
+</div>
+
+<div class="rinix-services">
+<span>Websites</span>
+<span>Web Apps</span>
+<span>E-Commerce</span>
+</div>
+
+<a
+href="https://rinix.online"
+target="_blank"
+rel="noopener noreferrer"
+class="rinix-visit-btn"
+>
+Visit rinix.online →
+</a>
+
+<div class="ad-sim-timer">
+Reward available in
+<strong id="adTimerCount">5</strong>s
+</div>
+
+</div>
+
+</div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
