@@ -2,198 +2,211 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <title>Roulette - Play Free European Roulette Online</title>
-  <meta name="description" content="Play European roulette online with fair RNG. Start with 1000 free tokens. Realistic wheel, multiple bet types, and ad rewards." />
-  <meta name="theme-color" content="#0a0508" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="Roulette - Free Online Casino Game" />
-  <meta property="og:description" content="Play European roulette with fair RNG and free tokens." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://yourdomain.com/game.html" />
-  <meta property="og:image" content="https://yourdomain.com/og-image.jpg" />
-  
-  <link rel="canonical" href="https://yourdomain.com/game.html" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon-192.png" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  
-  <!-- Preload Critical Resources -->
-  <link rel="preload" href="style.css" as="style" />
-  <link rel="preload" href="app.js" as="script" />
-  
-  <!-- Preconnect for Performance -->
-  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
-  <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-  
-  <link rel="stylesheet" href="style.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Roulette - Play Free European Roulette Online</title>
+<meta name="description" content="Play European roulette online with fair RNG. Start with 1000 free tokens. Realistic wheel, multiple bet types, and ad rewards." />
+<meta name="theme-color" content="#0a0508" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-  <!-- Google AdSense -->
-  <script>
-    window.adsbygoogle = window.adsbygoogle || [];
-    window.adBreak = window.adBreak || function (o) {
-      adsbygoogle.push(o);
-    };
-    window.adConfig = window.adConfig || function (o) {
-      adsbygoogle.push(o);
-    };
-  </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3562749923218282"
-     crossorigin="anonymous"></script>
-     <meta name="google-adsense-account" content="ca-pub-3562749923218282">
+<!-- Open Graph -->
+<meta property="og:title" content="Roulette - Free Online Casino Game" />
+<meta property="og:description" content="Play European roulette with fair RNG and free tokens." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://yourdomain.com/game.html" />
+<meta property="og:image" content="https://yourdomain.com/og-image.jpg" />
+
+<link rel="canonical" href="https://yourdomain.com/game.html" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icon-192.png" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+
+<!-- Preload Critical Resources -->
+<link rel="preload" href="style.css" as="style" />
+<link rel="preload" href="app.js" as="script" />
+
+<!-- Preconnect for Performance -->
+<link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+<link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+
+<link rel="stylesheet" href="style.css" />
+
+<!-- Google AdSense -->
+<script>
+window.adsbygoogle = window.adsbygoogle || [];
+window.adBreak = window.adBreak || function (o) {
+adsbygoogle.push(o);
+};
+window.adConfig = window.adConfig || function (o) {
+adsbygoogle.push(o);
+};
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3562749923218282"
+crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-3562749923218282">
 </head>
 <body>
 
 <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
 <main class="app-shell">
-  <!-- Top Navigation Bar -->
-  <header class="top-bar">
-    <div class="balance-pill">
-      <span id="displayName">Guest</span>
-      <span class="gold-text"><span id="balance">...</span> tokens</span>
-    </div>
-    <button class="icon-btn" id="historyBtn" title="History" aria-label="Open History">📜</button>
-    <button class="icon-btn" id="fullscreenBtn" title="Fullscreen" aria-label="Toggle Fullscreen">⛶</button>
-  </header>
+<!-- Top Navigation Bar -->
+<header class="top-bar">
+<div class="balance-pill">
+<span id="displayName">Guest</span>
+<span class="gold-text"><span id="balance">...</span> tokens</span>
+</div>
+<button class="icon-btn" id="historyBtn" title="History" aria-label="Open History">📜</button>
+<button class="icon-btn" id="fullscreenBtn" title="Fullscreen" aria-label="Toggle Fullscreen">⛶</button>
+</header>
 
-  <div class="game-container">
-    <!-- Wheel Section -->
-    <section class="wheel-section">
-      <div class="wheel-stage">
-        <div class="wheel-pointer"></div>
-        <div class="wheel-spin" id="wheelSpin">
-          <canvas id="wheelCanvas" width="300" height="300"></canvas>
-        </div>
-        <div class="ball" id="ball"></div>
-      </div>
-      <div class="result-badge">
-        <span>Last Result: </span>
-        <span class="last-result" id="lastResult">--</span>
-      </div>
-    </section>
+<div class="game-container">
+<!-- Wheel Section -->
+<section class="wheel-section">
+<div class="wheel-stage">
+<div class="wheel-pointer"></div>
+<div class="wheel-spin" id="wheelSpin">
+<canvas id="wheelCanvas" width="300" height="300"></canvas>
+</div>
+<div class="ball" id="ball"></div>
+</div>
+<div class="result-badge">
+<span>Last Result: </span>
+<span class="last-result" id="lastResult">--</span>
+</div>
+</section>
 
-    <!-- Controls Section -->
-    <section class="controls-section">
-      <div id="outcomeBox" class="outcome-box" style="display:none;"></div>
+<!-- Controls Section -->
+<section class="controls-section">
+<div id="outcomeBox" class="outcome-box" style="display:none;"></div>
 
-      <div class="wager-row">
-        <span id="wagerStatus">0 bet(s) · 10/bet · total 0</span>
-      </div>
+<div class="wager-row">
+<span id="wagerStatus">0 bet(s) · 10/bet · total 0</span>
+</div>
 
-      <div class="action-grid">
-        <button class="select-bets-btn" id="openBetsBtn">Select Numbers</button>
-        <button class="chip-btn" id="openChipModal">10 chip</button>
-        <button class="spin-btn" id="spinBtn" disabled>Spin</button>
-      </div>
+<div class="action-grid">
+<button class="select-bets-btn" id="openBetsBtn">Select Numbers</button>
+<button class="chip-btn" id="openChipModal">10 chip</button>
+<button class="spin-btn" id="spinBtn" disabled>Spin</button>
+</div>
 
-      <!-- Betting Panel -->
-      <div class="betting-panel" id="bettingPanel">
-        <div class="betting-panel-header">
-          <h3 class="gold-text" style="margin:0;font-size:14px;">Place Your Bets</h3>
-          <button class="modal-close" id="closeBetsBtn" aria-label="Close Bets Panel">&times;</button>
-        </div>
-        <div class="number-grid" id="numberGrid"></div>
-        <div class="outside-bets" id="outsideBets"></div>
-      </div>
+<!-- Betting Panel -->
+<div class="betting-panel" id="bettingPanel">
+<div class="betting-panel-header">
+<h3 class="gold-text" style="margin:0;font-size:14px;">Place Your Bets</h3>
+<button class="modal-close" id="closeBetsBtn" aria-label="Close Bets Panel">&times;</button>
+</div>
+<div class="number-grid" id="numberGrid"></div>
+<div class="outside-bets" id="outsideBets"></div>
+</div>
 
-      <button class="watch-ad-btn" id="watchAdBtn">▶ Watch Ad</button>
-      
-      <!-- Ad Slot -->
-      <div class="ad-slot" id="adSlot">
-        <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-3562749923218282"
-          data-ad-slot="0000000000"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-    </section>
-  </div>
+<button class="watch-ad-btn" id="watchAdBtn">▶ Watch Ad</button>
 
-  <footer class="footer-links">
-    <a href="privacy.html">Privacy Policy</a> &middot; 
-    <a href="terms.html">Terms of Service</a>
-  </footer>
+<!-- Ad Slot -->
+<div class="ad-slot" id="adSlot">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3562749923218282"
+crossorigin="anonymous"></script>
+<!-- roulette.rinix -->
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3562749923218282"
+data-ad-slot="2595121122"
+data-ad-format="auto"
+data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</section>
+</div>
+
+<footer class="footer-links">
+<a href="privacy.html">Privacy Policy</a> &middot;
+<a href="terms.html">Terms of Service</a>
+</footer>
 </main>
 
 <!-- Modals -->
 <!-- Chip Modal -->
 <div class="modal-backdrop hidden" id="chipModal" role="dialog" aria-modal="true">
-  <div class="modal-drawer">
-    <div class="modal-header">
-      <h3 class="gold-text">Select Chip Value</h3>
-      <button class="modal-close" id="closeChipBtn" aria-label="Close Chip Modal">&times;</button>
-    </div>
-    <p class="sub-text">Min bet 10 · Max bet 10,000</p>
-    <div class="chip-grid" id="chipGrid"></div>
-    <div class="custom-chip-box">
-      <input type="number" id="customChipInput" placeholder="Enter amount (10 - 10000)" min="10" max="10000" step="1" />
-      <button id="setCustomChipBtn" class="primary-btn">Set Chip</button>
-    </div>
-  </div>
+<div class="modal-drawer">
+<div class="modal-header">
+<h3 class="gold-text">Select Chip Value</h3>
+<button class="modal-close" id="closeChipBtn" aria-label="Close Chip Modal">&times;</button>
+</div>
+<p class="sub-text">
+Min bet 10 · Max bet 10,000
+</p>
+<div class="chip-grid" id="chipGrid"></div>
+<div class="custom-chip-box">
+<input type="number" id="customChipInput" placeholder="Enter amount (10 - 10000)" min="10" max="10000" step="1" />
+<button id="setCustomChipBtn" class="primary-btn">Set Chip</button>
+</div>
+</div>
 </div>
 
 <!-- History Modal -->
 <div class="modal-backdrop hidden" id="historyModal" role="dialog" aria-modal="true">
-  <div class="modal-drawer history-drawer">
-    <div class="modal-header">
-      <h3 class="gold-text">Betting History</h3>
-      <button class="modal-close" id="closeHistoryBtn" aria-label="Close History">&times;</button>
-    </div>
-    <div class="history-list-wrap" id="historyList">
-      <p class="empty-history">No games played yet.</p>
-    </div>
-  </div>
+<div class="modal-drawer history-drawer">
+<div class="modal-header">
+<h3 class="gold-text">Betting History</h3>
+<button class="modal-close" id="closeHistoryBtn" aria-label="Close History">&times;</button>
+</div>
+<div class="history-list-wrap" id="historyList">
+<p class="empty-history">
+No games played yet.
+</p>
+</div>
+</div>
 </div>
 
 <!-- Zero Balance Modal -->
 <div class="modal-backdrop hidden" id="zeroModal" role="dialog" aria-modal="true">
-  <div class="modal-drawer zero-modal-content">
-    <h3 class="gold-text">Out of Tokens!</h3>
-    <p>Watch a short ad to claim <strong>100 free tokens</strong> instantly.</p>
-    <div class="zero-actions">
-      <button class="reward-btn" id="zeroWatchAdBtn">▶ Watch Ad for +100 tokens</button>
-      <button class="secondary-btn" id="zeroCloseBtn">Not Now</button>
-    </div>
-  </div>
+<div class="modal-drawer zero-modal-content">
+<h3 class="gold-text">Out of Tokens!</h3>
+<p>
+Watch a short ad to claim <strong>100 free tokens</strong> instantly.
+</p>
+<div class="zero-actions">
+<button class="reward-btn" id="zeroWatchAdBtn">▶ Watch Ad for +100 tokens</button>
+<button class="secondary-btn" id="zeroCloseBtn">Not Now</button>
+</div>
+</div>
 </div>
 
 <!-- Ad Simulator Modal -->
 <div class="modal-backdrop hidden" id="adSimModal" role="dialog" aria-modal="true">
-  <div class="modal-drawer ad-sim-content">
-    <div class="rinix-reward-ad">
-      <div class="rinix-ad-top">
-        <span class="ad-badge">ADVERTISEMENT</span>
-        <span class="rinix-powered">rinix.online</span>
-      </div>
-      <div class="rinix-reward-content">
-        <div class="rinix-reward-logo">R</div>
-        <div class="rinix-reward-info">
-          <h2>RINIX</h2>
-          <h3>Web Development Agency</h3>
-          <p>We build modern websites, powerful web apps and professional digital experiences.</p>
-        </div>
-      </div>
-      <div class="rinix-services">
-        <span>Websites</span>
-        <span>Web Apps</span>
-        <span>E-Commerce</span>
-      </div>
-      <a href="https://rinix.online" target="_blank" rel="noopener noreferrer" class="rinix-visit-btn">
-        Visit rinix.online →
-      </a>
-      <div class="ad-sim-timer">
-        Reward available in <strong id="adTimerCount">10</strong>s
-      </div>
-    </div>
-  </div>
+<div class="modal-drawer ad-sim-content">
+<div class="rinix-reward-ad">
+<div class="rinix-ad-top">
+<span class="ad-badge">ADVERTISEMENT</span>
+<span class="rinix-powered">rinix.online</span>
+</div>
+<div class="rinix-reward-content">
+<div class="rinix-reward-logo">
+R
+</div>
+<div class="rinix-reward-info">
+<h2>RINIX</h2>
+<h3>Web Development Agency</h3>
+<p>
+We build modern websites, powerful web apps and professional digital experiences.
+</p>
+</div>
+</div>
+<div class="rinix-services">
+<span>Websites</span>
+<span>Web Apps</span>
+<span>E-Commerce</span>
+</div>
+<a href="https://rinix.online" target="_blank" rel="noopener noreferrer" class="rinix-visit-btn">
+Visit rinix.online →
+</a>
+<div class="ad-sim-timer">
+Reward available in <strong id="adTimerCount">10</strong>s
+</div>
+</div>
+</div>
 </div>
 
 <script src="app.js"></script>
