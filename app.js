@@ -730,7 +730,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // never silently skips the reward flow just because a real ad has no fill.
   function isAdSenseConfigured() {
     const script = document.querySelector('script[src*="adsbygoogle.js"]');
-    const hasRealClientId = !!script && !script.src.includes("ca-pub-XXXXXXXXXXXXXXXX");
+    const hasRealClientId = !!script && !script.src.includes("ca-pub-3562749923218282");
     return hasRealClientId && typeof window.adBreak === "function";
   }
 
@@ -787,7 +787,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const adIns = adSlot.querySelector(".adsbygoogle");
     const isPlaceholder =
     !adIns ||
-    adIns.getAttribute("data-ad-client") === "ca-pub-XXXXXXXXXXXXXXXX";
+    adIns.getAttribute("data-ad-client") === "ca-pub-3562749923218282";
 
     if (isPlaceholder) {
       adSlot.innerHTML = `
