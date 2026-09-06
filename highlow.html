@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>High-Low — Rinix Casino</title>
+<meta name="description" content="Play High-Low at Rinix Casino: guess whether the next card is higher or lower, place your chip, and win double on a correct call. Fair crypto RNG." />
+<meta name="theme-color" content="#050308" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="canonical" href="https://rinix.online/highlow.html" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icon-192.png" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+
+<link rel="preload" href="common.css" as="style" />
+<link rel="preload" href="highlow.css" as="style" />
+<link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+<link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+
+<link rel="stylesheet" href="common.css" />
+<link rel="stylesheet" href="highlow.css" />
+
+<script>
+  window.adsbygoogle = window.adsbygoogle || [];
+  window.adBreak = window.adBreak || function (o) { adsbygoogle.push(o); };
+  window.adConfig = window.adConfig || function (o) { adsbygoogle.push(o); };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3562749923218282" crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-3562749923218282">
+</head>
+<body>
+
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<header class="site-nav">
+  <a class="nav-home" href="index.html" title="Back to lobby" aria-label="Back to lobby">🏠</a>
+  <div class="nav-balance">
+    <span class="label">Balance</span>
+    <span class="value"><span data-balance-display>0</span> tokens</span>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn" data-watch-ad title="Watch an ad for tokens" aria-label="Watch an ad for tokens">▶</button>
+    <button class="icon-btn" id="historyBtn" data-open-modal="historyModal" title="History" aria-label="Open guess history">📜</button>
+  </div>
+</header>
+
+<main>
+  <div class="board-wrap">
+    <p class="board-title">Will the next card be Higher or Lower?</p>
+
+    <div class="hilo-stage">
+      <div class="hilo-card" id="currentCardEl"><span class="hilo-rank">A</span><span class="hilo-suit">♠</span></div>
+      <div class="hilo-arrow" aria-hidden="true">→</div>
+      <div class="hilo-card next hidden" id="nextCardEl"><span class="hilo-rank">?</span><span class="hilo-suit"></span></div>
+    </div>
+
+    <div id="outcomeBox" class="outcome-box"></div>
+
+    <div class="ad-slot" id="adSlot" style="margin-top:18px;">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3562749923218282" data-ad-slot="2595121125" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+</main>
+
+<div class="control-panel">
+  <div class="bet-total-row" id="betStatus">Choose your chip, then call it</div>
+  <div class="chip-grid" id="chipGrid"></div>
+  <div class="action-row">
+    <button class="btn-outline hilo-guess" id="lowBtn">▼ Lower</button>
+    <button class="btn-gold hilo-guess" id="highBtn">▲ Higher</button>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div class="modal-backdrop hidden" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+  <div class="modal-drawer">
+    <div class="modal-header"><h3 class="gold-text" id="historyModalTitle">Guess History</h3><button class="modal-close" data-close-modal="historyModal" aria-label="Close">&times;</button></div>
+    <div class="history-list" id="historyList"><p class="history-empty">No guesses yet.</p></div>
+  </div>
+</div>
+
+<!-- Zero Balance Modal -->
+<div class="modal-backdrop hidden" id="zeroModal" role="dialog" aria-modal="true" aria-labelledby="zeroModalTitle">
+  <div class="modal-drawer zero-modal-content">
+    <h3 class="gold-text" id="zeroModalTitle">Out of tokens!</h3>
+    <p>Watch a short ad to claim <strong>100 free tokens</strong> instantly.</p>
+    <div class="zero-actions">
+      <button class="btn-gold" data-watch-ad>▶ Watch Ad for +100 tokens</button>
+      <button class="btn-outline" id="zeroCloseBtn">Not Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Simulator Modal -->
+<div class="modal-backdrop hidden" id="adSimModal" role="dialog" aria-modal="true" aria-labelledby="adSimTitle">
+  <div class="modal-drawer ad-sim-content">
+    <div class="reward-ad-card">
+      <div class="reward-ad-top"><span class="badge-ad">ADVERTISEMENT</span><span style="font-size:10px;color:var(--muted)">rinix.online</span></div>
+      <div class="reward-ad-body">
+        <div class="reward-ad-mark">R</div>
+        <div><h4 id="adSimTitle">RINIX</h4><p>Web development agency — premium websites, web apps and e-commerce builds.</p></div>
+      </div>
+      <div class="ad-sim-timer">Reward available in <strong id="adTimerCount">10</strong>s</div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+</footer>
+
+<script src="common.js"></script>
+<script src="highlow.js"></script>
+</body>
+</html>

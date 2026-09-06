@@ -1,14 +1,23 @@
 {
-  "name": "Roulette",
-  "short_name": "Roulette",
-  "description": "Play-money roulette simulation \u2014 fair RNG, no real payments.",
-  "start_url": "game.html",
+  "name": "Rinix Casino",
+  "short_name": "Rinix Casino",
+  "description": "Play-money casino simulation — Roulette, Velo Cards, Slot Fruit Spin, High-Low, Coin Toss, and Lucky Dice Roll — fair RNG, no real payments.",
+  "start_url": "index.html",
+  "scope": "/",
   "display": "fullscreen",
   "orientation": "any",
-  "background_color": "#0a0508",
-  "theme_color": "#0a0508",
+  "background_color": "#050308",
+  "theme_color": "#050308",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "shortcuts": [
+    { "name": "Roulette", "url": "roulette.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Velo Cards", "url": "velo.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Slot Fruit Spin", "url": "slots.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "High-Low", "url": "highlow.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Coin Toss", "url": "cointoss.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Lucky Dice Roll", "url": "dice.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }

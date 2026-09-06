@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Roulette — builds on common.css tokens
+   ========================================================================== */
+:root {
+  --pocket-red: #b3122a;
+  --pocket-black: #161616;
+  --pocket-green: #0b3d2e;
+}
+
+html, body { height: 100%; overflow: hidden; touch-action: none; }
+
+.app-shell {
+  width: 100vw; height: 100dvh; max-width: 1300px; margin: 0 auto;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.app-shell .site-nav { padding-bottom: 8px; flex-shrink: 0; }
+
+.game-container {
+  flex: 1; min-height: 0;
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px;
+  padding: 8px 16px 16px; max-width: 1300px; margin: 0 auto; width: 100%;
+  align-items: center; overflow: hidden;
+}
+
+.wheel-section { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 100%; }
+.wheel-stage { position: relative; width: min(46vw, 46vh, 460px); height: min(46vw, 46vh, 460px); }
+.wheel-spin { position: absolute; inset: 0; will-change: transform; transition: transform 4.2s cubic-bezier(0.14,0.82,0.18,1); }
+.wheel-spin canvas { width: 100%; height: 100%; display: block; }
+#wheelCanvas { width: 100%; height: 100%; }
+.wheel-pointer {
+  position: absolute; top: -2%; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0; border-left: 9px solid transparent; border-right: 9px solid transparent;
+  border-top: 15px solid var(--gold); z-index: 3;
+}
+.ball {
+  position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+  border-radius: 50%; z-index: 4; pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, #ffffff, #cfcfcf 45%, #6b6b6b 75%, #2a2a2a 100%);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+.result-badge { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.last-result {
+  font-weight: 800; font-size: 14px; padding: 3px 12px; border-radius: 999px;
+  border: 1px solid rgba(212,175,55,0.4); background: rgba(0,0,0,0.3); min-width: 42px; text-align: center;
+}
+.last-result.red { color: #ff8fa0; }
+.last-result.black { color: #cfcfcf; }
+.last-result.green { color: #6fe0b4; }
+
+.controls-section { flex: 1; max-width: 460px; width: 100%; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+.outcome-box {
+  background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3);
+  font-size: 13px; text-align: center; padding: 8px 12px; border-radius: 10px; display: none;
+}
+.outcome-headline { font-weight: 700; }
+.wager-row { font-size: 12px; opacity: 0.85; text-align: center; }
+
+.action-grid { display: flex; gap: 8px; align-items: center; }
+.select-bets-btn, .chip-btn {
+  border-radius: 999px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold);
+  padding: 12px 14px; font-weight: 700; font-size: 12px; white-space: nowrap;
+}
+.spin-btn {
+  border-radius: 999px; background: linear-gradient(180deg, var(--gold-bright), var(--gold-dim));
+  color: #1a0d05; padding: 12px 20px; font-weight: 800; font-size: 14px; flex: 1;
+}
+.spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Betting board */
+.betting-panel { display: none; }
+.betting-panel.open {
+  display: block; position: fixed; inset: auto 0 0 0; z-index: 100;
+  background: var(--velvet-950); border-top: 1px solid var(--gold); border-radius: 20px 20px 0 0;
+  padding: 16px; max-height: 80dvh; overflow-y: auto;
+}
+.betting-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+
+.number-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin: 10px 0; }
+.num-cell {
+  position: relative; aspect-ratio: 1; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3);
+  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #f3e9d2;
+}
+.num-cell.red { background: var(--pocket-red); }
+.num-cell.black { background: var(--pocket-black); }
+.num-cell.green { background: var(--pocket-green); grid-column: span 6; aspect-ratio: auto; height: 34px; }
+.num-cell.has-bet, .outside-bet.has-bet {
+  outline: 2px solid var(--gold-bright); border-color: var(--gold-bright);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3);
+}
+.bet-chip-tag {
+  position: absolute; bottom: -6px; right: -6px;
+  background: var(--gold-bright); color: #1a0d05; font-weight: 800; font-size: 9.5px;
+  padding: 2px 5px; border-radius: 999px; border: 2px solid #170a1c; line-height: 1.2;
+}
+
+.outside-bets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.outside-bet {
+  position: relative; padding: 10px 4px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3);
+  background: rgba(255,255,255,0.03); font-size: 12px; text-align: center;
+}
+
+.custom-chip-box { display: flex; gap: 8px; margin-top: 10px; }
+.custom-chip-box input {
+  flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.4); border-radius: 8px;
+  color: var(--ivory); padding: 8px 12px; font-size: 14px; outline: none;
+}
+
+/* Responsive: PC/landscape shows board inline; portrait phones use bottom sheet */
+@media (min-width: 901px), (max-height: 520px) and (orientation: landscape) {
+  .betting-panel { display: block !important; position: static; background: none; border: none; border-radius: 0; padding: 0; max-height: min(46vh, 380px); overflow-y: auto; }
+  .betting-panel-header { display: none; }
+  #openBetsBtn { display: none; }
+}
+@media (max-width: 720px) and (orientation: portrait) {
+  .game-container { grid-template-columns: 1fr; grid-template-rows: auto 1fr; padding: 6px; gap: 6px; }
+  .wheel-stage { width: min(62vmin, 270px); height: min(62vmin, 270px); }
+  .controls-section { max-width: 100%; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .game-container { grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px; }
+  .wheel-stage { width: min(72vh, 40vw, 250px); height: min(72vh, 40vw, 250px); }
+  .site-nav { padding-top: 6px; padding-bottom: 4px; }
+  .nav-actions .icon-btn, .nav-home { width: 32px; height: 32px; font-size: 13px; }
+  .controls-section { gap: 6px; }
+  .betting-panel { max-height: min(58vh, 250px); }
+  .ad-slot, .btn-watch-ad-row { display: none; }
+}

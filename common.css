@@ -1,0 +1,310 @@
+/* ==========================================================================
+   RINIX CASINO — shared design system
+   Loaded on every page. Game-specific stylesheets (roulette.css, velo.css)
+   build on top of these tokens and never redefine them.
+   ========================================================================== */
+
+:root {
+  /* Black / Velvet / Gold palette */
+  --black: #050308;
+  --velvet-950: #0c0510;
+  --velvet-900: #170a1c;
+  --velvet-800: #221029;
+  --velvet-700: #33173b;
+  --gold: #d4af37;
+  --gold-bright: #f4d675;
+  --gold-dim: #8a6a1f;
+  --ivory: #f3ecd8;
+  --muted: #ab9db3;
+  --danger: #c0523f;
+  --win: #4fae7c;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--black);
+  color: var(--ivory);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body {
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, var(--velvet-800) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 600px at 100% 100%, var(--velvet-900) 0%, transparent 55%),
+    var(--black);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+a { color: var(--gold-bright); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; margin: 0; }
+p { margin: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
+}
+
+.gold-text { color: var(--gold); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Top navigation — identical shell on the lobby and every game            */
+/* ---------------------------------------------------------------------- */
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(12px + var(--safe-t)) 16px 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+.site-nav .nav-home {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.35);
+  background: rgba(0,0,0,0.35);
+  color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.site-nav .nav-balance {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(212,175,55,0.3);
+  min-width: 0;
+}
+.nav-balance .label {
+  font-size: 10.5px;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+}
+.nav-balance .value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--gold-bright);
+  font-size: 15px;
+}
+.nav-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.nav-actions .icon-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.35);
+  background: rgba(0,0,0,0.35);
+  color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.nav-actions .icon-btn:active { transform: scale(0.94); }
+
+/* ---------------------------------------------------------------------- */
+/* Buttons                                                                  */
+/* ---------------------------------------------------------------------- */
+.btn-gold {
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold-dim));
+  color: #1a0d05;
+  font-weight: 800;
+  padding: 13px 20px;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 6px 18px rgba(212,175,55,0.22);
+}
+.btn-gold:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.btn-gold:active:not(:disabled) { transform: translateY(1px); }
+.btn-outline {
+  border-radius: 999px;
+  border: 1px solid rgba(243,236,216,0.28);
+  color: var(--ivory);
+  background: transparent;
+  padding: 12px 18px;
+  font-size: 13px;
+}
+.btn-watch-ad {
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,55,0.55);
+  background: rgba(212,175,55,0.1);
+  color: var(--gold-bright);
+  padding: 9px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Modals                                                                   */
+/* ---------------------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(4,2,6,0.78);
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 200;
+}
+.modal-backdrop.hidden { display: none; }
+.modal-drawer {
+  width: 100%; max-width: 520px;
+  background: var(--velvet-950);
+  border-top: 1px solid var(--gold);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 20px 20px calc(20px + var(--safe-b));
+  max-height: 85dvh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+}
+.modal-header h3 { font-size: 17px; }
+.modal-close {
+  font-size: 24px; color: var(--gold); line-height: 1;
+  padding: 4px 8px;
+}
+.modal-sub {
+  font-size: 11.5px; color: var(--muted); margin: 4px 0 14px;
+}
+
+/* Chip picker grid, shared by both games */
+.chip-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 18px 0; }
+.chip {
+  width: 58px; height: 58px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; color: #fff;
+  border: 2px dashed rgba(255,255,255,0.55);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+  position: relative;
+}
+.chip.selected { box-shadow: 0 0 0 3px rgba(244,214,117,0.55), 0 3px 10px rgba(0,0,0,0.6); transform: translateY(-2px); }
+.chip[data-val="10"]   { background: radial-gradient(circle, #3d6fa0, #1c3450); }
+.chip[data-val="20"]   { background: radial-gradient(circle, #3f8a5c, #1c3d29); }
+.chip[data-val="50"]   { background: radial-gradient(circle, #b3122a, #4d0a12); }
+.chip[data-val="100"]  { background: radial-gradient(circle, #7a4fae, #33204d); }
+.chip[data-val="500"]  { background: radial-gradient(circle, #b3841f, #5c3f0d); }
+.chip[data-val="1000"] { background: radial-gradient(circle, #cda44d, #4a3210); }
+
+/* History list, shared shape */
+.history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.history-empty { text-align: center; color: var(--muted); padding: 30px 0; font-size: 13px; }
+.history-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,175,55,0.18);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 12.5px;
+}
+.history-card-head { display: flex; justify-content: space-between; color: var(--muted); margin-bottom: 4px; font-size: 11px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; }
+.badge.win  { background: rgba(79,174,124,0.2); color: #8fdcac; }
+.badge.loss { background: rgba(192,82,63,0.2); color: #ef9a8b; }
+.badge.even { background: rgba(212,175,55,0.2); color: var(--gold); }
+
+/* Shared fixed bottom control panel — chip picker + primary action button.
+   Used by any game with a single always-visible board (Velo, Slots,
+   High-Low, Coin Toss, Lucky Dice) instead of a bottom-sheet modal. */
+.control-panel {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background-color: #0b0710;
+  border-top: 1px solid rgba(212,175,55,0.22);
+  padding: 12px 16px calc(12px + var(--safe-b));
+}
+.control-panel .chip-grid { margin: 0 0 12px; }
+.control-panel .chip { width: 50px; height: 50px; font-size: 12px; }
+.action-row { display: flex; gap: 10px; max-width: 540px; margin: 0 auto; }
+.action-row .btn-gold { flex: 1; }
+.bet-total-row { text-align: center; font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
+
+/* Zero-balance & reward modal content */
+.zero-modal-content, .ad-sim-content { text-align: center; }
+.zero-modal-content p { margin: 10px 0 4px; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+.zero-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+
+.reward-ad-card {
+  position: relative; overflow: hidden;
+  padding: 24px; border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle at top right, rgba(212,175,55,0.22), transparent 45%),
+    linear-gradient(135deg, #120a17, #1c0f22);
+  border: 1px solid rgba(212,175,55,0.35);
+}
+.reward-ad-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.reward-ad-top .badge-ad { font-size: 9.5px; letter-spacing: 1.4px; color: var(--muted); background: rgba(255,255,255,0.05); padding: 5px 8px; border-radius: 5px; }
+.reward-ad-body { display: flex; align-items: center; gap: 16px; text-align: left; }
+.reward-ad-mark {
+  width: 62px; height: 62px; min-width: 62px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 30px; font-weight: 700; color: #1a0d05;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold-dim));
+}
+.reward-ad-body h4 { font-size: 15px; margin-bottom: 4px; color: var(--gold-bright); }
+.reward-ad-body p { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+.ad-sim-timer { margin-top: 16px; font-size: 12px; color: var(--muted); }
+.ad-sim-timer strong { color: var(--gold-bright); font-size: 16px; }
+
+/* Sponsored slot fallback (kept for parity with existing deployment) */
+.ad-slot {
+  border-radius: var(--radius-sm);
+  border: 1px dashed rgba(212,175,55,0.3);
+  background: rgba(255,255,255,0.02);
+  min-height: 84px;
+  overflow: hidden;
+}
+.rinix-ad { display: flex; align-items: center; gap: 12px; padding: 12px 14px; text-decoration: none; color: var(--ivory); }
+.rinix-ad-mark {
+  width: 42px; height: 42px; min-width: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 20px; color: #1a0d05;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold-dim));
+}
+.rinix-ad-copy { flex: 1; min-width: 0; }
+.rinix-ad-copy .brand { font-size: 10px; letter-spacing: 1.6px; color: var(--gold); }
+.rinix-ad-copy .headline { font-size: 13px; font-weight: 700; margin-top: 2px; }
+.rinix-ad-copy .sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+
+/* ---------------------------------------------------------------------- */
+/* Toast                                                                    */
+/* ---------------------------------------------------------------------- */
+.toast-container {
+  position: fixed; top: calc(10px + var(--safe-t)); left: 50%; transform: translateX(-50%);
+  z-index: 300; display: flex; flex-direction: column; gap: 6px;
+  width: 92%; max-width: 380px; pointer-events: none;
+}
+.toast {
+  background: rgba(51,23,59,0.96);
+  border: 1px solid rgba(212,175,55,0.35);
+  color: var(--ivory);
+  padding: 10px 16px; border-radius: 10px; font-size: 12.5px; text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  animation: toastIn 0.2s ease;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+footer.site-footer {
+  text-align: center; font-size: 11px; color: var(--muted); opacity: 0.7;
+  padding: 16px 12px calc(16px + var(--safe-b));
+}
+footer.site-footer a { color: var(--muted); margin: 0 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

@@ -1,0 +1,60 @@
+/* ==========================================================================
+   Slot Fruit Spin — builds on common.css tokens
+   ========================================================================== */
+body { padding-bottom: 178px; }
+
+.board-wrap { max-width: 480px; margin: 0 auto; padding: 6px 14px; text-align: center; }
+.board-title { font-size: 11.5px; color: var(--muted); margin-bottom: 14px; }
+
+.slot-machine {
+  position: relative;
+  display: flex; justify-content: center; gap: 12px;
+  padding: 22px 18px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, var(--velvet-900), var(--black) 80%);
+  border: 1px solid rgba(212,175,55,0.3);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(212,175,55,0.08);
+  margin-bottom: 16px;
+}
+.payline {
+  position: absolute; left: 10px; right: 10px; top: 50%;
+  height: 2px; background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+  transform: translateY(-1px);
+  opacity: 0.7;
+}
+.reel {
+  position: relative; z-index: 1;
+  width: 84px; height: 84px; border-radius: 14px;
+  background: radial-gradient(circle at 35% 30%, #221029, #0c0510);
+  border: 2px solid rgba(212,175,55,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px; line-height: 1;
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+}
+.reel.spinning { filter: blur(1.5px); }
+.reel.landed { animation: reelBounce 0.32s ease; }
+.reel.win { animation: reelGlow 1s ease infinite; }
+@keyframes reelBounce { 0% { transform: scale(1.18); } 100% { transform: scale(1); } }
+@keyframes reelGlow {
+  0%, 100% { box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 0 0 rgba(244,214,117,0.6); }
+  50% { box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 22px 6px rgba(244,214,117,0.5); }
+}
+
+.paytable {
+  display: flex; flex-wrap: wrap; gap: 6px 10px; justify-content: center;
+  font-size: 10.5px; color: var(--muted); margin-bottom: 6px;
+}
+.paytable span {
+  border: 1px solid rgba(212,175,55,0.2); border-radius: 999px;
+  padding: 3px 9px; background: rgba(255,255,255,0.02);
+}
+
+.outcome-box {
+  background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3);
+  font-size: 13px; font-weight: 700; text-align: center; padding: 10px 14px;
+  border-radius: 10px; display: none; margin-top: 8px;
+}
+
+@media (max-width: 420px) {
+  .reel { width: 68px; height: 68px; font-size: 36px; }
+}
