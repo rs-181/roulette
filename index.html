@@ -332,9 +332,9 @@
   <div id="lobbyLayer" class="main-layer hidden">
     <header class="site-nav">
       <div class="nav-balance">
-        <span>Balance: <span id="balanceDisplay">1000</span> tokens</span>
+        <span>Balance: <span data-balance-display>0</span> tokens</span>
       </div>
-      <button class="icon-btn" id="watchAdBtn" title="Watch ad"> ▶</button>
+      <button class="icon-btn" data-watch-ad title="Watch ad">▶ +100</button>
     </header>
 
     <main class="lobby-main">
@@ -393,11 +393,12 @@
     <div class="modal-drawer">
       <h3 style="color:var(--gold);">Out of tokens!</h3>
       <p style="color:#ddd;">Watch ad for +100 tokens.</p>
-      <button class="btn-gold" id="watchAdModal">▶ Watch Ad</button>
-      <button style="background:none; border:1px solid grey; color:white; margin-top:10px; padding:8px 20px; border-radius:30px;" id="closeZero">Not now</button>
+      <button class="btn-gold" data-watch-ad>▶ Watch Ad</button>
+      <button style="background:none; border:1px solid grey; color:white; margin-top:10px; padding:8px 20px; border-radius:30px;" id="zeroCloseBtn">Not now</button>
     </div>
   </div>
 
+  <script src="common.js"></script>
   <script>
     (function() {
       const video = document.querySelector('.video-bg');
@@ -418,11 +419,13 @@
       const enterBtn = document.getElementById('enterBtn');
       const termsCheckbox = document.getElementById('termsCheckbox');
       const lobbyLayer = document.getElementById('lobbyLayer');
-      const balanceSpan = document.getElementById('balanceDisplay');
-      
-      // simple balance (default 1000)
-      let balance = 1000;
-      balanceSpan.textContent = balance;
+
+      // The balance itself is no longer handled here at all. common.js
+      // already reads the real persisted value from localStorage on
+      // load, writes every [data-balance-display] element for us, and
+      // keeps this page in sync automatically if the balance changes on
+      // another tab or another game page. See common.js: getBalance(),
+      // broadcastBalance(), and the DOMContentLoaded auto-init.
 
       // Enable enter only when checkbox checked
       termsCheckbox.addEventListener('change', function() {
@@ -449,8 +452,6 @@
         // hide start overlay, show lobby
         startOverlay.classList.add('hidden');
         lobbyLayer.classList.remove('hidden');
-        // update balance display
-        balanceSpan.textContent = balance;
       });
 
       // Additional fullscreen on any click if needed
@@ -462,27 +463,11 @@
         }
       });
 
-      // Watch ad buttons (simulate +100)
-      function addTokens(amount) {
-        balance += amount;
-        balanceSpan.textContent = balance;
-      }
-      document.getElementById('watchAdBtn')?.addEventListener('click', () => addTokens(100));
-      document.getElementById('watchAdModal')?.addEventListener('click', () => {
-        addTokens(100);
-        document.getElementById('zeroModal').classList.add('hidden');
-      });
-      document.getElementById('closeZero')?.addEventListener('click', () => {
-        document.getElementById('zeroModal').classList.add('hidden');
-      });
-
-      // simulate low balance modal only if balance hits 0
-      function checkBalance() {
-        if (balance <= 0) {
-          document.getElementById('zeroModal')?.classList.remove('hidden');
-        }
-      }
-      // for demo, no changes needed
+      // Nothing else to wire up here — common.js's own DOMContentLoaded
+      // init already handles every [data-watch-ad] click (real ad or
+      // simulator, then +100 tokens persisted via localStorage),
+      // #zeroCloseBtn, and showing #zeroModal automatically whenever the
+      // real balance is 0.
     })();
   </script>
 </body>
