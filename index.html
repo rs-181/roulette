@@ -1,259 +1,489 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Rinix Casino — Free Roulette, Velo Cards, Slots &amp; More</title>
-<meta name="description" content="Rinix Casino: six free casino games — Roulette, Velo Cards, Slot Fruit Spin, High-Low, Coin Toss, and Lucky Dice Roll — sharing one token balance. Fair RNG, no real money." />
-<meta name="keywords" content="rinix casino, free roulette, velo cards, slot machine game, high low card game, coin toss game, dice game, free casino games, online casino simulation, play money casino" />
-<meta name="theme-color" content="#050308" />
-<meta name="robots" content="index, follow" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-<meta property="og:title" content="Rinix Casino — Free Roulette, Velo Cards, Slots &amp; More" />
-<meta property="og:description" content="Six free casino games sharing one token balance. Fair RNG, no real money." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://casino.rinix.online/" />
-<meta property="og:image" content="https://casino.rinix.online/icon-512.png" />
-<meta name="twitter:card" content="summary" />
-
-<link rel="canonical" href="https://rinix.online/" />
-<link rel="manifest" href="manifest.json" />
-<link rel="icon" href="icon-192.png" />
-<link rel="apple-touch-icon" href="icon-192.png" />
-
-<link rel="preload" href="common.css" as="style" />
-<link rel="stylesheet" href="common.css" />
-<link rel="preconnect" href="https://pagead2.googlesyndication.com" />
-<link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-
-<style>
-  .lobby-main { max-width: 1000px; margin: 0 auto; padding: 8px 18px 40px; }
-  .lobby-hero { text-align: center; padding: 36px 12px 30px; }
-  .lobby-hero .mark {
-    font-family: var(--font-display);
-    font-size: clamp(2.4rem, 9vw, 3.6rem);
-    letter-spacing: 1px;
-    background: linear-gradient(180deg, var(--gold-bright), var(--gold-dim));
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    line-height: 1.05;
-  }
-  .lobby-hero .tagline {
-    display: block; margin-top: 10px; font-size: 13.5px; color: var(--muted); letter-spacing: 0.3px;
-  }
-  .starting-note {
-    margin-top: 18px; display: inline-flex; align-items: center; gap: 8px;
-    font-size: 12px; color: var(--muted); border: 1px solid rgba(212,175,55,0.25);
-    padding: 8px 14px; border-radius: 999px; background: rgba(0,0,0,0.3);
-  }
-
-  .game-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin-top: 8px; }
-  @media (max-width: 480px) { .game-grid { grid-template-columns: 1fr; } }
-
-  .game-card {
-    position: relative; overflow: hidden;
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(212,175,55,0.22);
-    background: linear-gradient(160deg, var(--velvet-900), var(--black) 75%);
-    padding: 24px 20px 20px;
-    display: flex; flex-direction: column; gap: 12px;
-    min-height: 240px;
-  }
-  .game-card .motif { position: absolute; top: -24px; right: -24px; opacity: 0.9; pointer-events: none; }
-  .game-card h2 { font-size: 20px; color: var(--ivory); }
-  .game-card .desc { font-size: 12.5px; color: var(--muted); line-height: 1.55; max-width: 30ch; }
-  .game-card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
-  .game-card .tags span {
-    font-size: 10.5px; color: var(--gold); border: 1px solid rgba(212,175,55,0.3);
-    padding: 3px 9px; border-radius: 999px;
-  }
-  .game-card .play-link {
-    align-self: flex-start; margin-top: 6px;
-  }
-
-  /* Roulette motif: a small conic-gradient wheel */
-  .wheel-motif {
-    width: 130px; height: 130px; border-radius: 50%;
-    background: conic-gradient(#161616 0 9.7%, #b3122a 0 19.4%, #161616 0 29.1%, #b3122a 0 38.8%,
-      #161616 0 48.5%, #0b3d2e 0 51.5%, #161616 0 61.2%, #b3122a 0 70.9%, #161616 0 80.6%,
-      #b3122a 0 90.3%, #161616 0 100%);
-    box-shadow: 0 0 0 6px rgba(212,175,55,0.18);
-  }
-  /* Velo motif: a fanned trio of card backs */
-  .card-motif { width: 130px; height: 130px; }
-  .card-motif i {
-    position: absolute; width: 62px; height: 84px; border-radius: 8px;
-    background: linear-gradient(160deg, #2a1030, #170a1c);
-    border: 1px solid rgba(212,175,55,0.3);
-    top: 10px; right: 30px;
-  }
-  .card-motif i:nth-child(1) { transform: rotate(-14deg); right: 55px; }
-  .card-motif i:nth-child(2) { transform: rotate(2deg); right: 28px; top: 4px; }
-  .card-motif i:nth-child(3) { transform: rotate(18deg); right: 2px; }
-
-  /* Slots motif: three overlapping reel discs */
-  .slots-motif { width: 130px; height: 130px; }
-  .slots-motif i {
-    position: absolute; width: 46px; height: 60px; border-radius: 10px; top: 20px;
-    background: radial-gradient(circle at 35% 30%, #221029, #0c0510);
-    border: 2px solid rgba(212,175,55,0.35);
-    display: flex; align-items: center; justify-content: center; font-size: 22px;
-  }
-  .slots-motif i:nth-child(1) { right: 68px; }
-  .slots-motif i:nth-child(2) { right: 24px; top: 10px; }
-  .slots-motif i:nth-child(3) { right: -12px; }
-
-  /* High-Low motif: two cards with up/down cue */
-  .hilo-motif { width: 130px; height: 130px; }
-  .hilo-motif i {
-    position: absolute; width: 58px; height: 80px; border-radius: 8px; top: 14px;
-    background: linear-gradient(160deg, #f3f1e8, #d8d2bd);
-  }
-  .hilo-motif i:nth-child(1) { right: 56px; transform: rotate(-8deg); }
-  .hilo-motif i:nth-child(2) { right: 6px; transform: rotate(8deg); }
-  .hilo-motif span { position: absolute; right: 30px; top: 46px; font-size: 20px; color: var(--gold-bright); }
-
-  /* Coin toss motif: a single gold coin */
-  .coin-motif {
-    width: 110px; height: 110px; border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, var(--gold-dim) 100%);
-    border: 4px solid rgba(255,255,255,0.25);
-    box-shadow: 0 0 0 6px rgba(212,175,55,0.12);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display); font-weight: 800; font-size: 40px; color: #1a0d05;
-  }
-
-  /* Dice motif: two rotated dice */
-  .dice-motif { width: 130px; height: 130px; }
-  .dice-motif i {
-    position: absolute; width: 56px; height: 56px; border-radius: 12px; top: 30px;
-    background: linear-gradient(160deg, #fdfaf0, #e7dfc4);
-    display: flex; align-items: center; justify-content: center; font-size: 30px; color: #1a0d05;
-  }
-  .dice-motif i:nth-child(1) { right: 60px; transform: rotate(-10deg); }
-  .dice-motif i:nth-child(2) { right: 6px; top: 46px; transform: rotate(12deg); }
-
-  footer.site-footer a[href="https://rinix.online"] { color: var(--gold); font-weight: 700; }
-</style>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Rinix Casino — Free Games</title>
+  <meta name="description" content="Rinix Casino: six free casino games — Roulette, Velo Cards, Slot Fruit Spin, High-Low, Coin Toss, and Lucky Dice Roll — sharing one token balance. Fair RNG, no real money.">
+  <meta name="theme-color" content="#050308">
+  <meta name="robots" content="index, follow">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="canonical" href="https://rinix.online/">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+    :root {
+      --gold-bright: #f5d47a;
+      --gold: #d4af37;
+      --gold-dim: #b3922e;
+      --velvet-900: #1a0f1f;
+      --black: #050308;
+      --ivory: #f2ede4;
+      --muted: #a99b8c;
+      --font-display: 'Georgia', 'Times New Roman', serif;
+      --radius-lg: 20px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      background: var(--black);
+      overflow: hidden;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    /* video background — always clear, full screen, loop, no controls */
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none; /* no interaction */
+    }
+    /* main content layer sits above video */
+    .main-layer {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: transparent; /* no overlay, video visible */
+    }
+    /* start screen (agree terms) overlay */
+    .start-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 3, 8, 0.75); /* slight dark for readability, but video stays visible behind */
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 24px;
+      transition: opacity 0.3s;
+    }
+    .start-card {
+      background: linear-gradient(160deg, #1e1325, #0a060e);
+      border: 1px solid rgba(212,175,55,0.5);
+      border-radius: 32px;
+      padding: 32px 24px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+    }
+    .start-card h1 {
+      font-family: var(--font-display);
+      color: var(--gold-bright);
+      font-size: 2.6rem;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .start-card p {
+      color: var(--ivory);
+      font-size: 15px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .terms-box {
+      background: rgba(0,0,0,0.4);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 13px;
+      color: #d6c6b0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+    .terms-box input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--gold);
+      flex-shrink: 0;
+    }
+    .enter-btn {
+      background: linear-gradient(180deg, var(--gold-bright), var(--gold-dim));
+      border: none;
+      color: #1a0d05;
+      font-weight: 800;
+      font-size: 18px;
+      padding: 14px 28px;
+      border-radius: 40px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 6px 0 #7a5d1e;
+      transition: 0.1s ease;
+      font-family: 'Segoe UI', sans-serif;
+      margin-top: 8px;
+    }
+    .enter-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #7a5d1e;
+    }
+    .enter-btn:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      filter: grayscale(0.5);
+    }
+    .hidden {
+      display: none !important;
+    }
+    /* lobby content (after entering) */
+    .lobby-main {
+      width: 100%;
+      max-width: 1000px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 8px 16px 40px;
+      background: transparent;
+      border-radius: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      backdrop-filter: blur(2px);
+    }
+    .lobby-hero {
+      text-align: center;
+      padding: 24px 8px 16px;
+    }
+    .mark {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      background: linear-gradient(180deg, var(--gold-bright), var(--gold-dim));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+    .tagline {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #e5d7c4;
+      letter-spacing: 0.3px;
+    }
+    .starting-note {
+      margin-top: 12px;
+      display: inline-block;
+      font-size: 12px;
+      color: #f0e4d2;
+      border: 1px solid rgba(212,175,55,0.5);
+      padding: 6px 16px;
+      border-radius: 40px;
+      background: rgba(0,0,0,0.5);
+    }
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 8px;
+      width: 100%;
+    }
+    @media (max-width: 480px) {
+      .game-grid { grid-template-columns: 1fr; }
+    }
+    .game-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(212,175,55,0.3);
+      background: rgba(10, 5, 15, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 20px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 200px;
+    }
+    .game-card h2 {
+      font-size: 20px;
+      color: var(--ivory);
+    }
+    .desc {
+      font-size: 12.5px;
+      color: #d3c5b2;
+      line-height: 1.45;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .tags span {
+      font-size: 10.5px;
+      color: var(--gold-bright);
+      border: 1px solid rgba(212,175,55,0.5);
+      padding: 3px 9px;
+      border-radius: 40px;
+    }
+    .btn-gold {
+      background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+      color: #1a0d05;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 40px;
+      text-decoration: none;
+      text-align: center;
+      letter-spacing: 0.5px;
+      border: none;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: 0.2s;
+      font-size: 14px;
+      box-shadow: 0 4px 0 #7a5d1e;
+    }
+    .btn-gold:active { transform: translateY(2px); box-shadow: 0 2px 0 #7a5d1e; }
+    /* minimal top nav and footer inside lobby */
+    .site-nav {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 6px;
+      margin-bottom: 4px;
+    }
+    .nav-balance {
+      background: rgba(0,0,0,0.5);
+      border-radius: 30px;
+      padding: 6px 16px;
+      color: white;
+      font-size: 13px;
+      border: 1px solid rgba(212,175,55,0.4);
+    }
+    .icon-btn {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--gold);
+      color: var(--gold-bright);
+      border-radius: 30px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .site-footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #cfc0ae;
+      text-align: center;
+    }
+    .site-footer a {
+      color: var(--gold-bright);
+      text-decoration: none;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-drawer {
+      background: #1c1020;
+      border: 1px solid var(--gold);
+      border-radius: 28px;
+      padding: 24px;
+      width: 300px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+  <!-- Fullscreen background video, clear, no controls, autoplay loop -->
+  <video class="video-bg" autoplay muted loop playsinline preload="auto">
+    <source src="RINIX_CASINO.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-<header class="site-nav">
-  <span class="visually-hidden">Rinix Casino</span>
-  <div class="nav-balance">
-    <span class="label">Balance</span>
-    <span class="value"><span data-balance-display>0</span> tokens</span>
-  </div>
-  <div class="nav-actions">
-    <button class="icon-btn" data-watch-ad title="Watch an ad for free tokens" aria-label="Watch an ad for free tokens">▶</button>
-  </div>
-</header>
-
-<main class="lobby-main">
-  <div class="lobby-hero">
-    <h1 class="mark">RINIX CASINO</h1>
-    <span class="tagline">Six tables, one balance — play free, no real money involved.</span>
-    <div class="starting-note">🪙 New here? You start with 1,000 free tokens.</div>
-  </div>
-
-  <section class="game-grid" aria-label="Choose a game">
-    <article class="game-card">
-      <div class="motif wheel-motif" role="presentation"></div>
-      <h2>Roulette</h2>
-      <p class="desc">European single-zero wheel. Stack chips across straight numbers, colors, dozens and more — each bet keeps its own amount.</p>
-      <div class="tags"><span>Fair crypto RNG</span><span>37 pockets</span></div>
-      <a class="btn-gold play-link" href="roulette.html">Play Roulette</a>
-    </article>
-
-    <article class="game-card">
-      <div class="motif card-motif" role="presentation"><i></i><i></i><i></i></div>
-      <h2>Velo Cards</h2>
-      <p class="desc">Place chips on any of the 13 ranks. Draw reveals an In and an Out card — dodge both and your bet carries to the next round.</p>
-      <div class="tags"><span>52-card deck</span><span>2× payout</span></div>
-      <a class="btn-gold play-link" href="velo.html">Play Velo Cards</a>
-    </article>
-
-    <article class="game-card">
-      <div class="motif slots-motif" role="presentation"><i>🍒</i><i>⭐</i><i>7️⃣</i></div>
-      <h2>Slot Fruit Spin</h2>
-      <p class="desc">A clean 3-reel single-line slot. Match 3 identical fruit symbols on the payline for a big multiplier prize.</p>
-      <div class="tags"><span>Up to 100×</span><span>Fair RNG</span></div>
-      <a class="btn-gold play-link" href="slots.html">Play Slot Fruit Spin</a>
-    </article>
-
-    <article class="game-card">
-      <div class="motif hilo-motif" role="presentation"><i></i><i></i><span>▲▼</span></div>
-      <h2>High-Low</h2>
-      <p class="desc">A card is on the table. Bet, then call whether the next one is Higher or Lower for instant settlement.</p>
-      <div class="tags"><span>Fast-paced</span><span>2× payout</span></div>
-      <a class="btn-gold play-link" href="highlow.html">Play High-Low</a>
-    </article>
-
-    <article class="game-card">
-      <div class="motif" role="presentation"><div class="coin-motif">H</div></div>
-      <h2>Coin Toss</h2>
-      <p class="desc">The simplest table in the house. Call Heads or Tails, place your chip, and double or nothing on the flip.</p>
-      <div class="tags"><span>50/50</span><span>2× payout</span></div>
-      <a class="btn-gold play-link" href="cointoss.html">Play Coin Toss</a>
-    </article>
-
-    <article class="game-card">
-      <div class="motif dice-motif" role="presentation"><i>⚄</i><i>⚁</i></div>
-      <h2>Lucky Dice Roll</h2>
-      <p class="desc">Bet on a specific number, the total, or Even/Odd, then roll two dice for a fair, fast payout.</p>
-      <div class="tags"><span>Up to 30×</span><span>3 bet types</span></div>
-      <a class="btn-gold play-link" href="dice.html">Play Lucky Dice Roll</a>
-    </article>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a> · <a href="https://rinix.online" target="_blank" rel="noopener">RINIX</a>
-</footer>
-
-<!-- Zero Balance Modal -->
-<div class="modal-backdrop hidden" id="zeroModal" role="dialog" aria-modal="true" aria-labelledby="zeroModalTitle">
-  <div class="modal-drawer zero-modal-content">
-    <h3 class="gold-text" id="zeroModalTitle">Out of tokens!</h3>
-    <p>Watch a short ad to claim <strong>100 free tokens</strong> instantly.</p>
-    <div class="zero-actions">
-      <button class="btn-gold" data-watch-ad>▶ Watch Ad for +100 tokens</button>
-      <button class="btn-outline" id="zeroCloseBtn">Not Now</button>
+  <!-- Start Screen (Agree Terms) -->
+  <div id="startOverlay" class="start-overlay">
+    <div class="start-card">
+      <h1>RINIX CASINO</h1>
+      <p style="font-family: var(--font-display); letter-spacing:1px;">Premium free play experience</p>
+      <p>Please review and agree to the Terms & Conditions before entering.</p>
+      <div class="terms-box">
+        <input type="checkbox" id="termsCheckbox">
+        <label for="termsCheckbox">I agree to the <a href="terms.html" style="color:var(--gold);">Terms of Service</a> and <a href="privacy.html" style="color:var(--gold);">Privacy Policy</a>. I confirm I am 18+ and understand this is a simulation with no real money.</label>
+      </div>
+      <button id="enterBtn" class="enter-btn" disabled>ENTER CASINO</button>
+      <p style="font-size:11px; margin-top:10px; color:#b9a88e;">By entering, you accept fullscreen mode and background video loop.</p>
     </div>
   </div>
-</div>
 
-<!-- Ad Simulator Modal (fallback when the real AdSense adBreak API has no fill) -->
-<div class="modal-backdrop hidden" id="adSimModal" role="dialog" aria-modal="true" aria-labelledby="adSimTitle">
-  <div class="modal-drawer ad-sim-content">
-    <div class="reward-ad-card">
-      <div class="reward-ad-top">
-        <span class="badge-ad">ADVERTISEMENT</span>
-        <span style="font-size:10px;color:var(--muted)">rinix.online</span>
+  <!-- Main lobby layer (initially hidden until agree) -->
+  <div id="lobbyLayer" class="main-layer hidden">
+    <header class="site-nav">
+      <div class="nav-balance">
+        <span>Balance: <span id="balanceDisplay">1000</span> tokens</span>
       </div>
-      <div class="reward-ad-body">
-        <div class="reward-ad-mark">R</div>
-        <div>
-          <h4 id="adSimTitle">RINIX</h4>
-          <p>Web development agency — premium websites, web apps and e-commerce builds.</p>
-        </div>
+      <button class="icon-btn" id="watchAdBtn" title="Watch ad"> ▶</button>
+    </header>
+
+    <main class="lobby-main">
+      <div class="lobby-hero">
+        <h1 class="mark">RINIX CASINO</h1>
+        <span class="tagline">Six tables, one balance — free, no real money.</span>
+        <div class="starting-note">🪙 Start with 1,000 tokens</div>
       </div>
-      <div class="ad-sim-timer">Reward available in <strong id="adTimerCount">10</strong>s</div>
+
+      <section class="game-grid">
+        <article class="game-card">
+          <h2>Roulette</h2>
+          <p class="desc">European single-zero wheel. Place chips on numbers, colors, dozens.</p>
+          <div class="tags"><span>37 pockets</span><span>Fair RNG</span></div>
+          <a class="btn-gold" href="roulette.html">Play Roulette</a>
+        </article>
+        <article class="game-card">
+          <h2>Velo Cards</h2>
+          <p class="desc">Bet on ranks, dodge In/Out cards.</p>
+          <div class="tags"><span>2× payout</span></div>
+          <a class="btn-gold" href="velo.html">Play Velo</a>
+        </article>
+        <article class="game-card">
+          <h2>Slot Fruit Spin</h2>
+          <p class="desc">3-reel slot, match fruit.</p>
+          <div class="tags"><span>Up to 100×</span></div>
+          <a class="btn-gold" href="slots.html">Play Slots</a>
+        </article>
+        <article class="game-card">
+          <h2>High-Low</h2>
+          <p class="desc">Higher or Lower with cards.</p>
+          <div class="tags"><span>Fast</span></div>
+          <a class="btn-gold" href="highlow.html">Play High-Low</a>
+        </article>
+        <article class="game-card">
+          <h2>Coin Toss</h2>
+          <p class="desc">Heads or Tails, double or nothing.</p>
+          <div class="tags"><span>50/50</span></div>
+          <a class="btn-gold" href="cointoss.html">Play Coin Toss</a>
+        </article>
+        <article class="game-card">
+          <h2>Lucky Dice Roll</h2>
+          <p class="desc">Bet on total, Even/Odd, specific.</p>
+          <div class="tags"><span>Up to 30×</span></div>
+          <a class="btn-gold" href="dice.html">Play Dice</a>
+        </article>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="https://rinix.online" target="_blank">RINIX</a>
+    </footer>
+  </div>
+
+  <!-- Ad simulator / zero balance modals (minimal) -->
+  <div id="zeroModal" class="modal-backdrop hidden">
+    <div class="modal-drawer">
+      <h3 style="color:var(--gold);">Out of tokens!</h3>
+      <p style="color:#ddd;">Watch ad for +100 tokens.</p>
+      <button class="btn-gold" id="watchAdModal">▶ Watch Ad</button>
+      <button style="background:none; border:1px solid grey; color:white; margin-top:10px; padding:8px 20px; border-radius:30px;" id="closeZero">Not now</button>
     </div>
   </div>
-</div>
 
-<script>
-  window.adsbygoogle = window.adsbygoogle || [];
-  window.adBreak = window.adBreak || function (o) { adsbygoogle.push(o); };
-  window.adConfig = window.adConfig || function (o) { adsbygoogle.push(o); };
-</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3562749923218282" crossorigin="anonymous"></script>
-<meta name="google-adsense-account" content="ca-pub-3562749923218282">
+  <script>
+    (function() {
+      const video = document.querySelector('.video-bg');
+      // Ensure video plays and stays clear (no blur)
+      if (video) {
+        video.muted = false; // but autoplay policies require muted? we set muted attr in html for autoplay, but user wants sound? 
+        // We want 100% volume but browsers block autoplay with sound. We'll set volume after interaction.
+        video.volume = 1.0;
+        video.muted = false; // try; if blocked, we unmute after enter button
+        video.play().catch(() => {
+          // autoplay with sound blocked; unmute after enter
+          video.muted = true;
+          video.play();
+        });
+      }
 
-<script src="common.js"></script>
+      const startOverlay = document.getElementById('startOverlay');
+      const enterBtn = document.getElementById('enterBtn');
+      const termsCheckbox = document.getElementById('termsCheckbox');
+      const lobbyLayer = document.getElementById('lobbyLayer');
+      const balanceSpan = document.getElementById('balanceDisplay');
+      
+      // simple balance (default 1000)
+      let balance = 1000;
+      balanceSpan.textContent = balance;
+
+      // Enable enter only when checkbox checked
+      termsCheckbox.addEventListener('change', function() {
+        enterBtn.disabled = !this.checked;
+      });
+
+      // Enter button: hide overlay, show lobby, force fullscreen, unmute video
+      enterBtn.addEventListener('click', function() {
+        // unmute video and set volume
+        if (video) {
+          video.muted = false;
+          video.volume = 1.0;
+          video.play().catch(() => {});
+        }
+        // try fullscreen on document
+        const el = document.documentElement;
+        if (el.requestFullscreen) {
+          el.requestFullscreen().catch(() => {});
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        } else if (el.msRequestFullscreen) {
+          el.msRequestFullscreen();
+        }
+        // hide start overlay, show lobby
+        startOverlay.classList.add('hidden');
+        lobbyLayer.classList.remove('hidden');
+        // update balance display
+        balanceSpan.textContent = balance;
+      });
+
+      // Additional fullscreen on any click if needed
+      document.addEventListener('click', function(e) {
+        if (!document.fullscreenElement && !startOverlay.classList.contains('hidden')) {
+          // only if user already entered, allow fullscreen after any click
+          const doc = document.documentElement;
+          if (doc.requestFullscreen) doc.requestFullscreen().catch(()=>{});
+        }
+      });
+
+      // Watch ad buttons (simulate +100)
+      function addTokens(amount) {
+        balance += amount;
+        balanceSpan.textContent = balance;
+      }
+      document.getElementById('watchAdBtn')?.addEventListener('click', () => addTokens(100));
+      document.getElementById('watchAdModal')?.addEventListener('click', () => {
+        addTokens(100);
+        document.getElementById('zeroModal').classList.add('hidden');
+      });
+      document.getElementById('closeZero')?.addEventListener('click', () => {
+        document.getElementById('zeroModal').classList.add('hidden');
+      });
+
+      // simulate low balance modal only if balance hits 0
+      function checkBalance() {
+        if (balance <= 0) {
+          document.getElementById('zeroModal')?.classList.remove('hidden');
+        }
+      }
+      // for demo, no changes needed
+    })();
+  </script>
 </body>
 </html>
